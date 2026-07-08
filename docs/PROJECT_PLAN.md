@@ -1,0 +1,5 @@
+- Goal
+- Audience
+- Tech Stack
+- Core Features
+- Nice-to-have Features
