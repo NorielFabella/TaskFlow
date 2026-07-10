@@ -1,27 +1,36 @@
 import clsx from "clsx";
 import type { HTMLAttributes, ReactNode } from "react";
 
-interface CardProps extends HTMLAttributes<HTMLDivElement> {
+interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
     children: ReactNode;
-    padding?: "none" | "sm" | "md" | "lg";
+    variant?: "default" | "success" | "warning" | "danger" | "info";
 }
 
-export default function Card({
+export default function Badge({
     children,
-    padding = "md",
+    variant = "default",
     className,
     ...props
-}: CardProps) {
+}: BadgeProps) {
     return (
-        <div
+        <span
             className={clsx(
-                "rounded-2xl border border-zinc-800 bg-zinc-900 shadow-sm transition-colors duration-200",
+                "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium",
 
                 {
-                    "p-0": padding === "none",
-                    "p-4": padding === "sm",
-                    "p-6": padding === "md",
-                    "p-8": padding === "lg",
+                    "bg-zinc-800 text-zinc-200": variant === "default",
+
+                    "bg-emerald-500/15 text-emerald-400":
+                        variant === "success",
+
+                    "bg-amber-500/15 text-amber-400":
+                        variant === "warning",
+
+                    "bg-red-500/15 text-red-400":
+                        variant === "danger",
+
+                    "bg-sky-500/15 text-sky-400":
+                        variant === "info",
                 },
 
                 className
@@ -29,6 +38,6 @@ export default function Card({
             {...props}
         >
             {children}
-        </div>
+        </span>
     );
 }

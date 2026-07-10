@@ -4,26 +4,7 @@ import Badge from "../../../components/ui/Badge";
 import Card from "../../../components/ui/Card";
 import SectionHeader from "../../../components/common/SectionHeader";
 
-const deadlines = [
-    {
-        id: 1,
-        title: "TaskFlow UI Prototype",
-        due: "Tomorrow",
-        priority: "High",
-    },
-    {
-        id: 2,
-        title: "Database Design",
-        due: "Jul 12",
-        priority: "Medium",
-    },
-    {
-        id: 3,
-        title: "Portfolio Update",
-        due: "Jul 15",
-        priority: "Low",
-    },
-];
+import { deadlines } from "../../../data/deadlines";
 
 export default function UpcomingDeadlines() {
     return (
@@ -54,7 +35,7 @@ export default function UpcomingDeadlines() {
                             </h3>
 
                             <p className="mt-1 text-sm text-zinc-400">
-                                Due {deadline.due}
+                                Due {deadline.dueDate} in {deadline.project}
                             </p>
 
                             <div className="mt-3">
