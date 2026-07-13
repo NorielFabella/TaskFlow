@@ -9,5 +9,11 @@ export interface Project {
     description: string;
     progress: number;
     status: ProjectStatus;
-    tasks?: number;
+    tasks: number;
+}
+
+export interface ProjectFormData {
+    name: string;
+    description: string;
+    status: ProjectStatus;
 }

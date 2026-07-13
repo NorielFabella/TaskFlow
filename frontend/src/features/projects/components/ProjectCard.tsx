@@ -5,15 +5,20 @@ import {
 
 import type { Project } from "../../../types/project";
 
+import DropdownMenu from "../../../components/ui/DropdownMenu";
 import Badge from "../../../components/ui/Badge";
 import Card from "../../../components/ui/Card";
 
 interface ProjectCardProps {
     project: Project;
+    onEdit: (project: Project) => void;
+    onDelete: (project: Project) => void;
 }
 
 export default function ProjectCard({
     project,
+    onEdit,
+    onDelete,
 }: ProjectCardProps) {
     return (
         <Card className="group transition-all duration-300 hover:-translate-y-1 hover:border-white">
@@ -42,12 +47,19 @@ export default function ProjectCard({
 
                 </div>
 
-                <button
-                    className="rounded-lg p-2 text-zinc-500 transition hover:bg-zinc-800 hover:text-white"
-                    aria-label="Project Options"
-                >
-                    <MoreHorizontal size={18} />
-                </button>
+                <DropdownMenu
+                    items={[
+                        {
+                            label: "Edit",
+                            onClick: () => onEdit(project),
+                        },
+                        {
+                            label: "Delete",
+                            danger: true,
+                            onClick: () => onDelete(project),
+                        },
+                    ]}
+                />
 
             </div>
 

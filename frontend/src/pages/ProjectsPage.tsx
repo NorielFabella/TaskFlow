@@ -2,36 +2,149 @@ import { useState } from "react";
 
 import ProjectsToolbar from "../features/projects/components/ProjectsToolbar";
 import ProjectCard from "../features/projects/components/ProjectCard";
+import EmptyProjects from "../features/projects/components/EmptyProjects";
+import ProjectModal from "../features/projects/components/ProjectModal";
+import ConfirmDialog from "../components/ui/ConfirmDialog";
 
-import { projects } from "../data/projects";
+import { useProjects } from "../hooks/useProjects";
+
+import type { Project, ProjectFormData } from "../types/project";
 
 export default function ProjectsPage() {
-
     const [search, setSearch] = useState("");
+    const [status, setStatus] = useState("All");
 
+    const [modalOpen, setModalOpen] = useState(false);
 
-    const filteredProjects = projects.filter((project) =>
-        project.name.toLowerCase().includes(search.toLowerCase())
-    );
+    const [editingProject, setEditingProject] =
+        useState<Project | undefined>();
+
+    const [deletingProject, setDeletingProject] =
+        useState<Project | undefined>();
+
+    const {
+        projects,
+        createProject,
+        updateProject,
+        deleteProject,
+    } = useProjects();
+
+    const filteredProjects = projects.filter((project) => {
+        const matchesSearch =
+            project.name
+                .toLowerCase()
+                .includes(search.toLowerCase());
+
+        const matchesStatus =
+            status === "All" ||
+            project.status === status;
+
+        return matchesSearch && matchesStatus;
+    });
+
+    function handleCreateProject(
+        newProject: ProjectFormData
+    ) {
+        createProject(newProject);
+        setModalOpen(false);
+    }
+
+    function handleUpdateProject(
+        updatedProject: ProjectFormData
+    ) {
+        if (!editingProject) return;
+
+        updateProject(
+            editingProject.id,
+            updatedProject
+        );
+
+        setEditingProject(undefined);
+        setModalOpen(false);
+    }
+
+    function handleDeleteProject() {
+        if (!deletingProject) return;
+
+        deleteProject(deletingProject.id);
+
+        setDeletingProject(undefined);
+    }
+
+    function handleEditProject(project: Project) {
+        setEditingProject(project);
+        setModalOpen(true);
+    }
 
     return (
         <div className="space-y-8">
 
             <ProjectsToolbar
                 search={search}
+                status={status}
                 onSearchChange={setSearch}
+                onStatusChange={setStatus}
+                onCreateProject={() => setModalOpen(true)}
             />
 
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {filteredProjects.length > 0 ? (
 
-                {filteredProjects.map((project) => (
-                    <ProjectCard
-                        key={project.id}
-                        project={project}
-                    />
-                ))}
+                <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
 
-            </div>
+                    {filteredProjects.map((project) => (
+                        <ProjectCard
+                            key={project.id}
+                            project={project}
+                            onEdit={handleEditProject}
+                            onDelete={setDeletingProject}
+                        />
+                    ))}
+
+                </div>
+
+            ) : (
+
+                <EmptyProjects />
+
+            )}
+
+            <ProjectModal
+                open={modalOpen}
+                project={editingProject}
+                title={
+                    editingProject
+                        ? "Edit Project"
+                        : "Create Project"
+                }
+                submitLabel={
+                    editingProject
+                        ? "Save Changes"
+                        : "Create Project"
+                }
+                onClose={() => {
+                    setModalOpen(false);
+                    setEditingProject(undefined);
+                }}
+                onSubmit={
+                    editingProject
+                        ? handleUpdateProject
+                        : handleCreateProject
+                }
+            />
+
+            <ConfirmDialog
+                open={!!deletingProject}
+                title="Delete Project"
+                description={
+                    deletingProject
+                        ? `Are you sure you want to delete "${deletingProject.name}"?`
+                        : ""
+                }
+                confirmText="Delete"
+                cancelText="Cancel"
+                onConfirm={handleDeleteProject}
+                onCancel={() => setDeletingProject(undefined)}
+            />
 
         </div>
     );

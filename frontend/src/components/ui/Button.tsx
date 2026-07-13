@@ -3,7 +3,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: ReactNode;
-    variant?: "primary" | "secondary" | "ghost";
+    variant?: "primary" | "secondary" | "ghost" | "danger";
 }
 
 export default function Button({
@@ -26,6 +26,9 @@ export default function Button({
 
                     "text-zinc-400 hover:bg-zinc-900 hover:text-white":
                         variant === "ghost",
+
+                    "bg-red-600 text-white hover:bg-red-700":
+                        variant === "danger",
                 },
 
                 className
