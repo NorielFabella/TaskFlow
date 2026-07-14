@@ -1,10 +1,34 @@
 import clsx from "clsx";
 import type { HTMLAttributes, ReactNode } from "react";
 
+export type BadgeVariant =
+    | "default"
+    | "success"
+    | "warning"
+    | "danger"
+    | "info";
+
 interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
     children: ReactNode;
-    variant?: "default" | "success" | "warning" | "danger" | "info";
+    variant?: BadgeVariant;
 }
+
+const badgeVariants: Record<BadgeVariant, string> = {
+    default:
+        "bg-zinc-800 text-zinc-200",
+
+    success:
+        "bg-emerald-500/15 text-emerald-400",
+
+    warning:
+        "bg-amber-500/15 text-amber-400",
+
+    danger:
+        "bg-red-500/15 text-red-400",
+
+    info:
+        "bg-sky-500/15 text-sky-400",
+};
 
 export default function Badge({
     children,
@@ -16,23 +40,7 @@ export default function Badge({
         <span
             className={clsx(
                 "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium",
-
-                {
-                    "bg-zinc-800 text-zinc-200": variant === "default",
-
-                    "bg-emerald-500/15 text-emerald-400":
-                        variant === "success",
-
-                    "bg-amber-500/15 text-amber-400":
-                        variant === "warning",
-
-                    "bg-red-500/15 text-red-400":
-                        variant === "danger",
-
-                    "bg-sky-500/15 text-sky-400":
-                        variant === "info",
-                },
-
+                badgeVariants[variant],
                 className
             )}
             {...props}

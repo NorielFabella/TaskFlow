@@ -9,6 +9,7 @@ import ConfirmDialog from "../components/ui/ConfirmDialog";
 import { useProjects } from "../hooks/useProjects";
 
 import type { Project, ProjectFormData } from "../types/project";
+import PageHeader from "../components/common/PageHeader";
 
 export default function ProjectsPage() {
     const [search, setSearch] = useState("");
@@ -79,13 +80,20 @@ export default function ProjectsPage() {
     return (
         <div className="space-y-8">
 
-            <ProjectsToolbar
-                search={search}
-                status={status}
-                onSearchChange={setSearch}
-                onStatusChange={setStatus}
-                onCreateProject={() => setModalOpen(true)}
-            />
+            <PageHeader
+                title="Projects"
+                subtitle="Manage all of your projects."
+            >
+
+                <ProjectsToolbar
+                    search={search}
+                    status={status}
+                    onSearchChange={setSearch}
+                    onStatusChange={setStatus}
+                    onCreateProject={() => setModalOpen(true)}
+                />
+
+            </PageHeader>
 
             {filteredProjects.length > 0 ? (
 

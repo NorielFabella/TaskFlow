@@ -1,5 +1,6 @@
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
+import FilterSelect from "../../../components/ui/FilterSelect";
 
 interface ProjectsToolbarProps {
     search: string;
@@ -31,16 +32,28 @@ export default function ProjectsToolbar({
                     
                 />
 
-                <select
+                <FilterSelect
                     value={status}
-                    onChange={(e) => onStatusChange(e.target.value)}
-                    className="rounded-xl border border-zinc-800 bg-zinc-900 px-4 text-sm text-white outline-none transition-colors hover:border-zinc-700 focus:border-white"
+                    onChange={(e) =>
+                        onStatusChange(e.target.value)
+                    }
                 >
-                    <option value="All">All Status</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Not Started">Not Started</option>
-                </select>
+                    <option value="All">
+                        All Status
+                    </option>
+
+                    <option value="Not Started">
+                        Not Started
+                    </option>
+
+                    <option value="In Progress">
+                        In Progress
+                    </option>
+
+                    <option value="Completed">
+                        Completed
+                    </option>
+                </FilterSelect>
 
             </div>
 
