@@ -2,16 +2,45 @@ import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
 import FilterSelect from "../../../components/ui/FilterSelect";
 
-interface TasksToolbarProps {
-    search: string;
-    status: string;
-    priority: string;
+type TaskStatusFilter =
+    | "All"
+    | "Completed"
+    | "Pending";
 
-    onSearchChange: (value: string) => void;
-    onStatusChange: (value: string) => void;
-    onPriorityChange: (value: string) => void;
+
+type PriorityFilter =
+    | "All"
+    | "High"
+    | "Medium"
+    | "Low";
+
+
+interface TasksToolbarProps {
+
+    search: string;
+
+    status: TaskStatusFilter;
+
+    priority: PriorityFilter;
+
+
+    onSearchChange: (
+        value: string
+    ) => void;
+
+
+    onStatusChange: (
+        value: TaskStatusFilter
+    ) => void;
+
+
+    onPriorityChange: (
+        value: PriorityFilter
+    ) => void;
+
 
     onCreateTask: () => void;
+
 }
 
 export default function TasksToolbar({
@@ -40,7 +69,9 @@ export default function TasksToolbar({
                 <FilterSelect
                     value={status}
                     onChange={(e) =>
-                        onStatusChange(e.target.value)
+                        onStatusChange(
+                            e.target.value as TaskStatusFilter
+                        )
                     }
                     className="rounded-xl border border-zinc-800 bg-zinc-900 px-4 text-sm text-white outline-none transition-colors hover:border-zinc-700 focus:border-white"
                 >
@@ -60,7 +91,9 @@ export default function TasksToolbar({
                 <FilterSelect
                     value={priority}
                     onChange={(e) =>
-                        onPriorityChange(e.target.value)
+                        onPriorityChange(
+                            e.target.value as PriorityFilter
+                        )
                     }
                     className="rounded-xl border border-zinc-800 bg-zinc-900 px-4 text-sm text-white outline-none transition-colors hover:border-zinc-700 focus:border-white"
                 >

@@ -1,11 +1,16 @@
 import Card from "../../../components/ui/Card";
 import SectionHeader from "../../../components/common/SectionHeader";
-
+import EmptyProjects from "../../projects/components/EmptyProjects";
 import ProjectCard from "../../projects/components/ProjectCard";
 
-import { projects } from "../../../data/projects";
+import { useProjects } from "../../../hooks/useProjects";
 
 export default function RecentProjects() {
+
+    const { projects } = useProjects();
+
+    const recentProjects = projects.slice(0, 3);
+
     return (
         <Card className="flex h-full flex-col">
 
@@ -14,16 +19,28 @@ export default function RecentProjects() {
                 subtitle="Your latest active projects."
             />
 
-            <div className="space-y-4">
+            {recentProjects.length > 0 ? (
 
-                {projects.map((project) => (
-                    <ProjectCard
-                        key={project.id}
-                        project={project}
-                    />
-                ))}
+                <div className="space-y-4">
 
-            </div>
+                    {recentProjects.map((project) => (
+
+                        <ProjectCard
+                            key={project.id}
+                            project={project}
+                            onEdit={() => {}}
+                            onDelete={() => {}}
+                        />
+
+                    ))}
+
+                </div>
+
+            ) : (
+
+                <EmptyProjects />
+
+            )}
 
         </Card>
     );

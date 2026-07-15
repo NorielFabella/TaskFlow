@@ -8,9 +8,14 @@ import Badge from "../../../components/ui/Badge";
 import Card from "../../../components/ui/Card";
 import SectionHeader from "../../../components/common/SectionHeader";
 
-import { tasks } from "../../../data/tasks";
+import { useTasks } from "../../../hooks/useTasks";
 
 export default function RecentTasks() {
+
+    const { tasks } = useTasks();
+
+    const recentTasks = tasks.slice(0, 5);
+
     return (
         <Card className="flex h-full flex-col">
 
@@ -19,81 +24,104 @@ export default function RecentTasks() {
                 subtitle="Your latest task activity."
             />
 
-            <div className="space-y-3">
+            {recentTasks.length > 0 ? (
 
-                {tasks.map((task) => (
+                <div className="space-y-3">
 
-                    <div
-                        key={task.id}
-                        className="flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-950 p-4 transition-colors hover:border-white"
-                    >
+                    {recentTasks.map((task) => (
 
-                        <div className="flex items-center gap-4">
+                        <div
+                            key={task.id}
+                            className="
+                                flex
+                                items-center
+                                justify-between
+                                rounded-xl
+                                border
+                                border-zinc-800
+                                bg-zinc-950
+                                p-4
+                                transition-colors
+                                hover:border-white
+                            "
+                        >
 
-                            {task.completed ? (
-                                <CheckCircle2
-                                    size={20}
-                                    className="text-emerald-400"
-                                />
-                            ) : (
-                                <Circle
-                                    size={20}
-                                    className="text-zinc-500"
-                                />
-                            )}
+                            <div className="flex items-center gap-4">
 
-                            <div>
+                                {task.completed ? (
 
-                                <h3
-                                    className={
-                                        task.completed
-                                            ? "font-medium text-zinc-500 line-through"
-                                            : "font-medium text-white"
+                                    <CheckCircle2
+                                        size={20}
+                                        className="text-emerald-400"
+                                    />
+
+                                ) : (
+
+                                    <Circle
+                                        size={20}
+                                        className="text-zinc-500"
+                                    />
+
+                                )}
+
+                                <div>
+
+                                    <h3
+                                        className={
+                                            task.completed
+                                                ? "font-medium text-zinc-500 line-through"
+                                                : "font-medium text-white"
+                                        }
+                                    >
+                                        {task.title}
+                                    </h3>
+
+                                    <p className="text-sm text-zinc-400">
+                                        {task.project}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div className="flex items-center gap-3">
+
+                                <Badge
+                                    variant={
+                                        task.priority === "High"
+                                            ? "danger"
+                                            : task.priority === "Medium"
+                                            ? "warning"
+                                            : "default"
                                     }
                                 >
-                                    {task.title}
-                                </h3>
+                                    {task.priority}
+                                </Badge>
 
-                                <p className="text-sm text-zinc-400">
-                                    {task.project}
-                                </p>
+
+                                <Clock3
+                                    size={18}
+                                    className="text-zinc-500"
+                                />
 
                             </div>
 
                         </div>
 
-                        <div className="flex items-center gap-3">
+                    ))}
 
-                            {task.priority === "High" && (
-                                <Badge variant="danger">
-                                    High
-                                </Badge>
-                            )}
+                </div>
 
-                            {task.priority === "Medium" && (
-                                <Badge variant="warning">
-                                    Medium
-                                </Badge>
-                            )}
+            ) : (
 
-                            {task.priority === "Low" && (
-                                <Badge>
-                                    Low
-                                </Badge>
-                            )}
+                <div className="flex flex-1 items-center justify-center py-12 text-sm text-zinc-500">
 
-                            <Clock3
-                                size={18}
-                                className="text-zinc-500"
-                            />
+                    No tasks yet.
 
-                        </div>
+                </div>
 
-                    </div>
-
-                ))}
-
-            </div>
+            )}
 
         </Card>
     );

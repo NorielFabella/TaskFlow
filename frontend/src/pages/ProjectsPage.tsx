@@ -5,6 +5,7 @@ import ProjectCard from "../features/projects/components/ProjectCard";
 import EmptyProjects from "../features/projects/components/EmptyProjects";
 import ProjectModal from "../features/projects/components/ProjectModal";
 import ConfirmDialog from "../components/ui/ConfirmDialog";
+import { toast } from "sonner";
 
 import { useProjects } from "../hooks/useProjects";
 
@@ -47,6 +48,7 @@ export default function ProjectsPage() {
         newProject: ProjectFormData
     ) {
         createProject(newProject);
+        toast.success("Project created.");
         setModalOpen(false);
     }
 
@@ -60,6 +62,8 @@ export default function ProjectsPage() {
             updatedProject
         );
 
+        toast.success("Project updated.");
+
         setEditingProject(undefined);
         setModalOpen(false);
     }
@@ -68,7 +72,7 @@ export default function ProjectsPage() {
         if (!deletingProject) return;
 
         deleteProject(deletingProject.id);
-
+        toast.success("Project deleted.");
         setDeletingProject(undefined);
     }
 

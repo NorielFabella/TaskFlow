@@ -1,18 +1,19 @@
 import {
     FolderKanban,
-    MoreHorizontal,
 } from "lucide-react";
 
 import type { Project } from "../../../types/project";
 
-import DropdownMenu from "../../../components/ui/DropdownMenu";
 import Badge from "../../../components/ui/Badge";
 import Card from "../../../components/ui/Card";
+import DropdownMenu from "../../../components/ui/DropdownMenu";
 
 interface ProjectCardProps {
     project: Project;
-    onEdit: (project: Project) => void;
-    onDelete: (project: Project) => void;
+
+    onEdit?: (project: Project) => void;
+
+    onDelete?: (project: Project) => void;
 }
 
 export default function ProjectCard({
@@ -20,6 +21,30 @@ export default function ProjectCard({
     onEdit,
     onDelete,
 }: ProjectCardProps) {
+
+    const menuItems = [
+
+        ...(onEdit
+            ? [
+                  {
+                      label: "Edit",
+                      onClick: () => onEdit(project),
+                  },
+              ]
+            : []),
+
+        ...(onDelete
+            ? [
+                  {
+                      label: "Delete",
+                      danger: true,
+                      onClick: () => onDelete(project),
+                  },
+              ]
+            : []),
+
+    ];
+
     return (
         <Card className="group transition-all duration-300 hover:-translate-y-1 hover:border-white">
 
@@ -30,7 +55,9 @@ export default function ProjectCard({
                 <div className="flex items-center gap-3">
 
                     <div className="rounded-xl bg-zinc-800 p-3 transition-colors group-hover:bg-white group-hover:text-black">
+
                         <FolderKanban size={20} />
+
                     </div>
 
                     <div>
@@ -47,19 +74,13 @@ export default function ProjectCard({
 
                 </div>
 
-                <DropdownMenu
-                    items={[
-                        {
-                            label: "Edit",
-                            onClick: () => onEdit(project),
-                        },
-                        {
-                            label: "Delete",
-                            danger: true,
-                            onClick: () => onDelete(project),
-                        },
-                    ]}
-                />
+                {menuItems.length > 0 && (
+
+                    <DropdownMenu
+                        items={menuItems}
+                    />
+
+                )}
 
             </div>
 
@@ -96,15 +117,17 @@ export default function ProjectCard({
 
             <div className="mt-6 flex items-center justify-between">
 
-                {project.status === "Completed" ? (
-                    <Badge variant="success">
-                        Completed
-                    </Badge>
-                ) : (
-                    <Badge variant="info">
-                        In Progress
-                    </Badge>
-                )}
+                <Badge
+                    variant={
+                        project.status === "Completed"
+                            ? "success"
+                            : "info"
+                    }
+                >
+                    {project.status === "Completed"
+                        ? "Completed"
+                        : "In Progress"}
+                </Badge>
 
                 <span className="text-sm text-zinc-500">
                     {project.tasks ?? 0} Tasks

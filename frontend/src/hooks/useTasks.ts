@@ -19,7 +19,11 @@ import {
     toggleTaskCompleted,
 } from "../services/task.service";
 
+import { useActivity } from "./useActivity";
+
+
 const STORAGE_KEY = "taskflow-tasks";
+
 
 export function useTasks() {
 
@@ -27,26 +31,79 @@ export function useTasks() {
         load(STORAGE_KEY, initialTasks)
     );
 
+
+    const {
+        createActivity,
+    } = useActivity();
+
+
+
     useEffect(() => {
-        save(STORAGE_KEY, tasks);
+
+        save(
+            STORAGE_KEY,
+            tasks
+        );
+
     }, [tasks]);
+
+
 
     return {
 
         tasks,
 
-        createTask(newTask: TaskFormData) {
+
+        createTask(
+            newTask: TaskFormData
+        ) {
+
+            const task = {
+                id: Date.now(),
+                completed: false,
+                ...newTask,
+            };
+
 
             setTasks((previous) =>
-                createTask(previous, newTask)
+                createTask(
+                    previous,
+                    newTask
+                )
             );
 
+
+            createActivity({
+
+                id: Date.now(),
+
+                type: "task",
+
+                title: "Task Created",
+
+                description:
+                    `"${task.title}" was added.`,
+
+                time: "Just now",
+
+            });
+
         },
+
+
 
         updateTask(
             id: number,
             updatedTask: TaskFormData
         ) {
+
+
+            const existingTask =
+                tasks.find(
+                    (task) =>
+                        task.id === id
+                );
+
 
             setTasks((previous) =>
                 updateTask(
@@ -56,17 +113,84 @@ export function useTasks() {
                 )
             );
 
+
+            if (existingTask) {
+
+                createActivity({
+
+                    id: Date.now(),
+
+                    type: "task",
+
+                    title: "Task Updated",
+
+                    description:
+                        `"${existingTask.title}" was updated.`,
+
+                    time: "Just now",
+
+                });
+
+            }
+
         },
 
-        deleteTask(id: number) {
+
+
+        deleteTask(
+            id: number
+        ) {
+
+
+            const task =
+                tasks.find(
+                    (task) =>
+                        task.id === id
+                );
+
 
             setTasks((previous) =>
-                deleteTask(previous, id)
+                deleteTask(
+                    previous,
+                    id
+                )
             );
+
+
+            if (task) {
+
+                createActivity({
+
+                    id: Date.now(),
+
+                    type: "task",
+
+                    title: "Task Deleted",
+
+                    description:
+                        `"${task.title}" was removed.`,
+
+                    time: "Just now",
+
+                });
+
+            }
 
         },
 
-        toggleTaskCompleted(id: number) {
+
+
+        toggleTaskCompleted(
+            id: number
+        ) {
+
+
+            const task =
+                tasks.find(
+                    (task) =>
+                        task.id === id
+                );
+
 
             setTasks((previous) =>
                 toggleTaskCompleted(
@@ -74,6 +198,26 @@ export function useTasks() {
                     id
                 )
             );
+
+
+            if (task && !task.completed) {
+
+                createActivity({
+
+                    id: Date.now(),
+
+                    type: "completed",
+
+                    title: "Task Completed",
+
+                    description:
+                        `"${task.title}" was completed.`,
+
+                    time: "Just now",
+
+                });
+
+            }
 
         },
 

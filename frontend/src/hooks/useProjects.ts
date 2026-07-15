@@ -18,27 +18,91 @@ import type {
     ProjectFormData,
 } from "../types/project";
 
+import { useActivity } from "./useActivity";
+
+
 const STORAGE_KEY = "taskflow-projects";
 
+
 export function useProjects() {
+
     const [projects, setProjects] = useState<Project[]>(() =>
-        load(STORAGE_KEY, initialProjects)
+        load(
+            STORAGE_KEY,
+            initialProjects
+        )
     );
 
+
+    const {
+        createActivity,
+    } = useActivity();
+
+
+
     useEffect(() => {
-        save(STORAGE_KEY, projects);
+
+        save(
+            STORAGE_KEY,
+            projects
+        );
+
     }, [projects]);
 
-    function createProject(newProject: ProjectFormData) {
+
+
+    function createProject(
+        newProject: ProjectFormData
+    ) {
+
+        const project = {
+            id: Date.now(),
+            ...newProject,
+            progress: 0,
+            tasks: 0,
+        };
+
+
         setProjects((previous) =>
-            createProjectService(previous, newProject)
+            createProjectService(
+                previous,
+                newProject
+            )
         );
+
+
+        createActivity({
+
+            id: Date.now(),
+
+            type: "project",
+
+            title: "Project Created",
+
+            description:
+                `"${project.name}" was created.`,
+
+            time: "Just now",
+
+        });
+
     }
+
+
 
     function updateProject(
         id: number,
         updatedProject: ProjectFormData
     ) {
+
+
+        const existingProject =
+            projects.find(
+                (project) =>
+                    project.id === id
+            );
+
+
         setProjects((previous) =>
             updateProjectService(
                 previous,
@@ -46,18 +110,86 @@ export function useProjects() {
                 updatedProject
             )
         );
+
+
+
+        if (existingProject) {
+
+            createActivity({
+
+                id: Date.now(),
+
+                type: "project",
+
+                title: "Project Updated",
+
+                description:
+                    `"${existingProject.name}" was updated.`,
+
+                time: "Just now",
+
+            });
+
+        }
+
     }
 
-    function deleteProject(id: number) {
+
+
+    function deleteProject(
+        id: number
+    ) {
+
+
+        const project =
+            projects.find(
+                (project) =>
+                    project.id === id
+            );
+
+
         setProjects((previous) =>
-            deleteProjectService(previous, id)
+            deleteProjectService(
+                previous,
+                id
+            )
         );
+
+
+
+        if (project) {
+
+            createActivity({
+
+                id: Date.now(),
+
+                type: "project",
+
+                title: "Project Deleted",
+
+                description:
+                    `"${project.name}" was removed.`,
+
+                time: "Just now",
+
+            });
+
+        }
+
     }
+
+
 
     return {
+
         projects,
+
         createProject,
+
         updateProject,
+
         deleteProject,
+
     };
+
 }

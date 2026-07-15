@@ -4,6 +4,7 @@ export type ActivityType =
     | "completed"
     | "settings";
 
+
 export interface Activity {
     id: number;
     type: ActivityType;

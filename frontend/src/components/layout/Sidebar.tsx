@@ -5,9 +5,14 @@ import {
     CalendarDays,
     Settings,
     CircleUserRound,
+    LogOut,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+
+import { NavLink, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import clsx from "clsx";
+
+import { useAuth } from "../../features/auth/context/AuthContext";
 
 const navigation = [
     {
@@ -38,6 +43,26 @@ const navigation = [
 ];
 
 export default function Sidebar() {
+
+    const navigate = useNavigate();
+
+    const {
+        user,
+        logout,
+    } = useAuth();
+
+    async function handleLogout() {
+
+        await logout();
+
+        toast.success(
+            "Signed out successfully."
+        );
+
+        navigate("/login");
+
+    }
+
     return (
         <aside className="flex h-full w-72 flex-col border-r border-zinc-800 bg-zinc-950">
 
@@ -52,6 +77,7 @@ export default function Sidebar() {
                     </div>
 
                     <div>
+
                         <h1 className="text-xl font-bold tracking-tight text-white">
                             TaskFlow
                         </h1>
@@ -59,6 +85,7 @@ export default function Sidebar() {
                         <p className="text-xs text-zinc-500">
                             Project Management
                         </p>
+
                     </div>
 
                 </div>
@@ -72,6 +99,7 @@ export default function Sidebar() {
                 <div className="flex flex-col gap-2">
 
                     {navigation.map((item) => {
+
                         const Icon = item.icon;
 
                         return (
@@ -100,38 +128,76 @@ export default function Sidebar() {
                                             )}
                                         />
 
-                                        <span>{item.name}</span>
+                                        <span>
+                                            {item.name}
+                                        </span>
                                     </>
                                 )}
                             </NavLink>
                         );
+
                     })}
 
                 </div>
 
             </nav>
 
-            {/* User Section */}
+            {/* User */}
 
             <div className="border-t border-zinc-800 p-4">
 
-                <div className="flex items-center gap-3 rounded-xl bg-zinc-900 p-3">
+                <div className="rounded-xl bg-zinc-900 p-3">
 
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-black">
-                        <CircleUserRound size={24} />
+                    <div className="flex items-center gap-3">
+
+                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-black">
+
+                            <CircleUserRound size={24} />
+
+                        </div>
+
+                        <div className="min-w-0">
+
+                            <p className="truncate text-sm font-semibold text-white">
+                                {user?.name}
+                            </p>
+
+                            <p className="truncate text-xs text-zinc-500">
+                                {user?.email}
+                            </p>
+
+                        </div>
+
                     </div>
 
-                    <div className="min-w-0">
+                    <button
+                        onClick={handleLogout}
+                        className="
+                            mt-4
+                            flex
+                            w-full
+                            items-center
+                            gap-3
+                            rounded-xl
+                            px-4
+                            py-3
+                            text-sm
+                            font-medium
+                            text-zinc-400
+                            transition-all
+                            duration-200
+                            hover:bg-red-500/10
+                            hover:text-red-400
+                        "
+                    >
 
-                        <p className="truncate text-sm font-semibold text-white">
-                            Noriel
-                        </p>
+                        <LogOut size={18} />
 
-                        <p className="truncate text-xs text-zinc-500">
-                            Frontend Developer
-                        </p>
+                        <span>
+                            Logout
+                        </span>
 
-                    </div>
+                    </button>
 
                 </div>
 

@@ -1,7 +1,9 @@
+import type { ReactNode } from "react";
+
 interface SectionHeaderProps {
     title: string;
     subtitle?: string;
-    action?: React.ReactNode;
+    action?: ReactNode;
 }
 
 export default function SectionHeader({
@@ -13,7 +15,7 @@ export default function SectionHeader({
         <div className="mb-6 flex items-start justify-between gap-4">
 
             <div>
-                <h2 className="text-lg font-semibold text-white">
+                <h2 className="text-xl font-semibold text-white">
                     {title}
                 </h2>
 
