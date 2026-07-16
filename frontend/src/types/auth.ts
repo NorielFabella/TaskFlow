@@ -3,6 +3,7 @@ export interface LoginData {
     password: string;
 }
 
+
 export interface RegisterData {
     name: string;
     email: string;
@@ -10,13 +11,9 @@ export interface RegisterData {
     confirmPassword: string;
 }
 
+
 export interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
-}
-
-/* Stored locally (temporary only) */
-export interface StoredUser extends User {
-    password: string;
 }

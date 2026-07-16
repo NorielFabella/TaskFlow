@@ -8,6 +8,8 @@ import ConfirmDialog from "../components/ui/ConfirmDialog";
 import { toast } from "sonner";
 
 import { useProjects } from "../hooks/useProjects";
+import { useTasks } from "../hooks/useTasks";
+import { getProjectProgress } from "../services/projectProgress.service";
 
 import type { Project, ProjectFormData } from "../types/project";
 import PageHeader from "../components/common/PageHeader";
@@ -28,20 +30,30 @@ export default function ProjectsPage() {
         projects,
         createProject,
         updateProject,
-        deleteProject,
+        deleteProject
     } = useProjects();
 
+    const { tasks } = useTasks();
+
     const filteredProjects = projects.filter((project) => {
+
         const matchesSearch =
             project.name
                 .toLowerCase()
                 .includes(search.toLowerCase());
 
+        const projectStats =
+            getProjectProgress(project, tasks);
+
         const matchesStatus =
             status === "All" ||
-            project.status === status;
+            projectStats.status === status;
 
-        return matchesSearch && matchesStatus;
+        return (
+            matchesSearch &&
+            matchesStatus
+        );
+
     });
 
     function handleCreateProject(
@@ -107,6 +119,7 @@ export default function ProjectsPage() {
                         <ProjectCard
                             key={project.id}
                             project={project}
+                            tasks={tasks}
                             onEdit={handleEditProject}
                             onDelete={setDeletingProject}
                         />

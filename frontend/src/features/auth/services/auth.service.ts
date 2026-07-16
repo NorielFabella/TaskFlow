@@ -1,110 +1,179 @@
+import { supabase } from "../../../lib/supabase";
+
 import type {
     LoginData,
     RegisterData,
-    StoredUser,
     User,
 } from "../../../types/auth";
 
-const USERS_KEY = "taskflow-users";
-const SESSION_KEY = "taskflow-session";
-
-function getUsers(): StoredUser[] {
-
-    const stored = localStorage.getItem(USERS_KEY);
-
-    if (!stored) {
-        return [];
-    }
-
-    return JSON.parse(stored);
-
-}
-
-function saveUsers(users: StoredUser[]) {
-
-    localStorage.setItem(
-        USERS_KEY,
-        JSON.stringify(users)
-    );
-
-}
 
 export async function register(
     data: RegisterData
 ): Promise<User> {
 
-    const users = getUsers();
+    const {
+        data: authData,
+        error: authError,
+    } =
+        await supabase.auth.signUp({
+            email: data.email,
+            password: data.password,
+        });
 
-    const emailExists = users.some(
-        (user) => user.email === data.email
-    );
 
-    if (emailExists) {
-        throw new Error("Email already exists.");
+    if (authError) {
+        throw new Error(
+            authError.message
+        );
     }
 
-    const storedUser: StoredUser = {
-        id: Date.now(),
+
+    if (!authData.user) {
+        throw new Error(
+            "Registration failed."
+        );
+    }
+
+
+    const { error: profileError } =
+        await supabase
+            .from("profiles")
+            .insert({
+                id: authData.user.id,
+                name: data.name,
+                email: data.email,
+            });
+
+
+    if (profileError) {
+        throw new Error(
+            profileError.message
+        );
+    }
+
+
+    return {
+        id: authData.user.id,
         name: data.name,
         email: data.email,
-        password: data.password,
     };
 
-    users.push(storedUser);
-
-    saveUsers(users);
-
-    const { password, ...user } = storedUser;
-
-    return user;
-
 }
+
+
 
 export async function login(
     data: LoginData
 ): Promise<User> {
 
-    const users = getUsers();
+    const {
+        data: authData,
+        error,
+    } =
+        await supabase.auth.signInWithPassword({
+            email: data.email,
+            password: data.password,
+        });
 
-    const storedUser = users.find(
-        (user) => user.email === data.email
-    );
 
-    if (!storedUser) {
-        throw new Error("Invalid email or password.");
+    if (error) {
+        throw new Error(
+            error.message
+        );
     }
 
-    if (storedUser.password !== data.password) {
-        throw new Error("Invalid email or password.");
+
+    if (!authData.user) {
+        throw new Error(
+            "Login failed."
+        );
     }
 
-    const { password, ...user } = storedUser;
 
-    localStorage.setItem(
-        SESSION_KEY,
-        JSON.stringify(user)
-    );
+    const {
+        data: profile,
+        error: profileError,
+    } =
+        await supabase
+            .from("profiles")
+            .select("*")
+            .eq(
+                "id",
+                authData.user.id
+            )
+            .single();
 
-    return user;
+
+    if (profileError) {
+        throw new Error(
+            profileError.message
+        );
+    }
+
+
+    return {
+        id: profile.id,
+        name: profile.name,
+        email: profile.email,
+    };
 
 }
+
+
 
 export async function logout(): Promise<void> {
 
-    localStorage.removeItem(SESSION_KEY);
+    const { error } =
+        await supabase.auth.signOut();
+
+
+    if (error) {
+        throw new Error(
+            error.message
+        );
+    }
 
 }
 
-export function getCurrentUser(): User | null {
 
-    const stored = localStorage.getItem(
-        SESSION_KEY
-    );
 
-    if (!stored) {
+export async function getCurrentUser(): Promise<User | null> {
+
+    const {
+        data: {
+            session,
+        },
+    } =
+        await supabase.auth.getSession();
+
+
+    if (!session?.user) {
         return null;
     }
 
-    return JSON.parse(stored);
+
+    const {
+        data: profile,
+    } =
+        await supabase
+            .from("profiles")
+            .select("*")
+            .eq(
+                "id",
+                session.user.id
+            )
+            .single();
+
+
+    if (!profile) {
+        return null;
+    }
+
+
+    return {
+        id: profile.id,
+        name: profile.name,
+        email: profile.email,
+    };
 
 }

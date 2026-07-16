@@ -5,6 +5,9 @@ import { BrowserRouter } from "react-router-dom";
 import "./styles/globals.css";
 import App from "./App";
 import { AuthProvider } from "./features/auth/context/AuthContext";
+import { supabase } from "./lib/supabase";
+
+console.log(supabase);
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
