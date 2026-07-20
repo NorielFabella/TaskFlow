@@ -38,7 +38,7 @@ export default function TaskModal({
 
     const [titleValue, setTitleValue] = useState("");
     const [description, setDescription] = useState("");
-    const [project, setProject] = useState("");
+    const [projectId, setProjectId] = useState(0);
     const [priority, setPriority] =
         useState<"Low" | "Medium" | "High">("Medium");
     const [dueDate, setDueDate] = useState("");
@@ -48,13 +48,13 @@ export default function TaskModal({
         if (task) {
             setTitleValue(task.title);
             setDescription(task.description);
-            setProject(task.project);
+            setProjectId(task.projectId);
             setPriority(task.priority);
             setDueDate(task.dueDate);
         } else {
             setTitleValue("");
             setDescription("");
-            setProject("");
+            setProjectId(0);
             setPriority("Medium");
             setDueDate("");
         }
@@ -68,7 +68,7 @@ export default function TaskModal({
         onSubmit({
             title: titleValue,
             description,
-            project,
+            projectId,
             priority,
             dueDate,
         });
@@ -117,9 +117,9 @@ export default function TaskModal({
                     </label>
 
                     <FilterSelect
-                        value={project}
+                        value={projectId.toString()}
                         onChange={(e) =>
-                            setProject(e.target.value)
+                            setProjectId(Number(e.target.value))
                         }
                     >
                         <option value="">
@@ -129,7 +129,7 @@ export default function TaskModal({
                         {projects.map((projectItem) => (
                             <option
                                 key={projectItem.id}
-                                value={projectItem.name}
+                                value={projectItem.id}
                             >
                                 {projectItem.name}
                             </option>

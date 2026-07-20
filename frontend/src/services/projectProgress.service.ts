@@ -14,7 +14,7 @@ export function getProjectProgress(
 ): ProjectProgress {
 
     const projectTasks = tasks.filter(
-        (task) => task.project === project.name
+        (task) => task.projectId === project.id
     );
 
     const totalTasks = projectTasks.length;

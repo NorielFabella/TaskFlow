@@ -5,15 +5,25 @@ import Card from "../../../components/ui/Card";
 import SectionHeader from "../../../components/common/SectionHeader";
 
 import { useTasks } from "../../../hooks/useTasks";
+import { useProjects } from "../../../hooks/useProjects";
 
 export default function UpcomingDeadlines() {
 
     const { tasks } = useTasks();
+    const { projects } = useProjects();
 
+
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
 
     const upcomingDeadlines = tasks
         .filter((task) => !task.completed)
-        .filter((task) => task.dueDate)
+        .filter((task) => {
+            const due = new Date(task.dueDate);
+            due.setHours(0, 0, 0, 0);
+            return due >= today;
+        })
         .sort(
             (a, b) =>
                 new Date(a.dueDate).getTime() -
@@ -28,10 +38,14 @@ export default function UpcomingDeadlines() {
 
         const today = new Date();
 
+        today.setHours(0, 0, 0, 0);
+
         const deadline = new Date(dueDate);
 
+        deadline.setHours(0, 0, 0, 0);
+
         const difference =
-            Math.ceil(
+            Math.round(
                 (
                     deadline.getTime() -
                     today.getTime()
@@ -39,21 +53,29 @@ export default function UpcomingDeadlines() {
                 (1000 * 60 * 60 * 24)
             );
 
+        if (difference < 0) {
 
-        if (difference <= 0) {
-            return "Due today";
+            const overdue = Math.abs(difference);
+
+            return overdue === 1
+                ? "Overdue by 1 day"
+                : `Overdue by ${overdue} days`;
+
         }
 
+        if (difference === 0) {
+            return "Due today";
+        }
 
         if (difference === 1) {
             return "Due tomorrow";
         }
 
-
         return `Due in ${difference} days`;
 
     }
 
+    
 
     return (
         <Card className="flex h-full flex-col">
@@ -68,75 +90,81 @@ export default function UpcomingDeadlines() {
 
                 <div className="space-y-4">
 
-                    {upcomingDeadlines.map((task) => (
+                    {upcomingDeadlines.map((task) => {
 
-                        <div
-                            key={task.id}
-                            className="
-                                flex
-                                items-start
-                                gap-3
-                                rounded-xl
-                                border
-                                border-zinc-800
-                                bg-zinc-950
-                                p-4
-                                transition-colors
-                                hover:border-white
-                            "
-                        >
+                        const project = projects.find(
+                            (project) =>
+                                project.id === task.projectId
+                        );
 
-                            <div className="rounded-lg bg-zinc-900 p-2">
+                        return (
 
-                                <CalendarDays size={18} />
+                            <div
+                                key={task.id}
+                                className="
+                                    flex
+                                    items-start
+                                    gap-3
+                                    rounded-xl
+                                    border
+                                    border-zinc-800
+                                    bg-zinc-950
+                                    p-4
+                                    transition-colors
+                                    hover:border-white
+                                "
+                            >
 
-                            </div>
+                                <div className="rounded-lg bg-zinc-900 p-2">
 
+                                    <CalendarDays size={18} />
 
-                            <div className="min-w-0 flex-1">
+                                </div>
 
-                                <h3 className="truncate font-medium text-white">
+                                <div className="min-w-0 flex-1">
 
-                                    {task.title}
+                                    <h3 className="truncate font-medium text-white">
 
-                                </h3>
+                                        {task.title}
 
+                                    </h3>
 
-                                <p className="mt-1 text-sm text-zinc-400">
+                                    <p className="mt-1 text-sm text-zinc-400">
 
-                                    {getDueLabel(task.dueDate)}
+                                        {getDueLabel(task.dueDate)}
 
-                                    {task.project && (
-                                        <>
-                                            {" "}
-                                            • {task.project}
-                                        </>
-                                    )}
+                                        {project && (
+                                            <>
+                                                {" "}
+                                                • {project.name}
+                                            </>
+                                        )}
 
-                                </p>
+                                    </p>
 
+                                    <div className="mt-3">
 
-                                <div className="mt-3">
+                                        <Badge
+                                            variant={
+                                                task.priority === "High"
+                                                    ? "danger"
+                                                    : task.priority === "Medium"
+                                                    ? "warning"
+                                                    : "default"
+                                            }
+                                        >
+                                            {task.priority} Priority
+                                        </Badge>
 
-                                    <Badge
-                                        variant={
-                                            task.priority === "High"
-                                                ? "danger"
-                                                : task.priority === "Medium"
-                                                ? "warning"
-                                                : "default"
-                                        }
-                                    >
-                                        {task.priority} Priority
-                                    </Badge>
+                                    </div>
 
                                 </div>
 
                             </div>
 
-                        </div>
+                        );
 
-                    ))}
+                    })}
 
                 </div>
 

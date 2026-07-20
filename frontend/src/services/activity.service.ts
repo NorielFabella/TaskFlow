@@ -1,52 +1,76 @@
+import { supabase } from "../lib/supabase";
+
 import type { Activity } from "../types/activity";
 
-const ACTIVITY_KEY = "taskflow-activities";
+export async function createActivity(
+    activity: Omit<Activity, "id">
+): Promise<void> {
 
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
 
-export function getActivities(): Activity[] {
+    if (!user) {
+        throw new Error("Not authenticated.");
+    }
 
-    const stored =
-        localStorage.getItem(ACTIVITY_KEY);
+    const { error } = await supabase
+        .from("activities")
+        .insert({
+            user_id: user.id,
 
+            type: activity.type,
 
-    if (!stored) {
+            title: activity.title,
+
+            description: activity.description,
+        });
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+}
+
+export async function getActivities(): Promise<Activity[]> {
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
         return [];
     }
 
+    const {
+        data,
+        error,
+    } = await supabase
+        .from("activities")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", {
+            ascending: false,
+        });
 
-    return JSON.parse(stored);
+    if (error) {
+        throw new Error(error.message);
+    }
 
-}
+    return data.map((activity) => ({
 
+        id: activity.id,
 
+        type: activity.type,
 
-export function addActivity(
-    activity: Activity
-) {
+        title: activity.title,
 
-    const activities =
-        getActivities();
+        description: activity.description,
 
+        time: new Date(
+            activity.created_at
+        ).toLocaleString(),
 
-    const updatedActivities = [
-        activity,
-        ...activities,
-    ];
-
-
-    localStorage.setItem(
-        ACTIVITY_KEY,
-        JSON.stringify(updatedActivities)
-    );
-
-}
-
-
-
-export function clearActivities() {
-
-    localStorage.removeItem(
-        ACTIVITY_KEY
-    );
+    }));
 
 }

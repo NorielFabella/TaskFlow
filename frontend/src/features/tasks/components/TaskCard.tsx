@@ -11,9 +11,12 @@ import type { Task } from "../../../types/task";
 import Card from "../../../components/ui/Card";
 import Badge from "../../../components/ui/Badge";
 import DropdownMenu from "../../../components/ui/DropdownMenu";
+import type { Project } from "../../../types/project";
 
 interface TaskCardProps {
     task: Task;
+
+    projects: Project[];
 
     onToggleComplete: (task: Task) => void;
 
@@ -24,6 +27,7 @@ interface TaskCardProps {
 
 export default function TaskCard({
     task,
+    projects,
     onToggleComplete,
     onEdit,
     onDelete,
@@ -45,6 +49,10 @@ export default function TaskCard({
             day: "numeric",
             year: "numeric",
         }
+    );
+
+    const project = projects.find(
+        (project) => project.id === task.projectId
     );
 
     return (
@@ -154,7 +162,7 @@ export default function TaskCard({
                     />
 
                     <span>
-                        {task.project}
+                        {project?.name ?? "Unknown Project"}
                     </span>
 
                 </div>

@@ -9,6 +9,14 @@ import SectionHeader from "../../../components/common/SectionHeader";
 import { useProjects } from "../../../hooks/useProjects";
 import { useTasks } from "../../../hooks/useTasks";
 
+import {
+    deleteAllProjects,
+} from "../../../services/project.service";
+
+import {
+    deleteAllTasks,
+} from "../../../services/task.service";
+
 export default function WorkspaceSection() {
 
     const { projects } = useProjects();
@@ -17,25 +25,30 @@ export default function WorkspaceSection() {
     const [confirmOpen, setConfirmOpen] =
         useState(false);
 
-    function handleResetWorkspace() {
+    async function handleResetWorkspace() {
 
-        localStorage.removeItem(
-            "taskflow-projects"
-        );
+        try {
+            await deleteAllTasks();
+            await deleteAllProjects();
+            toast.success(
+                "Workspace reset."
+            );
 
-        localStorage.removeItem(
-            "taskflow-tasks"
-        );
+            setTimeout(() => {
 
-        toast.success(
-            "Workspace reset."
-        );
+                window.location.reload();
 
-        setTimeout(() => {
+            }, 600);
 
-            window.location.reload();
+        } catch (error) {
 
-        }, 600);
+            toast.error(
+                error instanceof Error
+                    ? error.message
+                    : "Failed to reset workspace."
+            );
+
+        }
 
     }
 

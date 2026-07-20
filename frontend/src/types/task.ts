@@ -10,7 +10,7 @@ export interface Task {
 
     description: string;
 
-    project: string;
+    projectId: number;
 
     priority: TaskPriority;
 
@@ -24,7 +24,7 @@ export interface TaskFormData {
 
     description: string;
 
-    project: string;
+    projectId: number;
 
     priority: TaskPriority;
 

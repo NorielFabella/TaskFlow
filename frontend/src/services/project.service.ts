@@ -1,53 +1,113 @@
+import { supabase } from "../lib/supabase";
+
 import type {
     Project,
     ProjectFormData,
 } from "../types/project";
 
-export function createProject(
-    projects: Project[],
-    newProject: ProjectFormData
-): Project[] {
+export async function getProjects(): Promise<Project[]> {
 
-    const project: Project = {
+    const {
+        data,
+        error,
+    } = await supabase
+        .from("projects")
+        .select("*")
+        .order("created_at", {
+            ascending: false,
+        });
 
-        id: Date.now(),
+    if (error) {
+        throw new Error(error.message);
+    }
 
-        name: newProject.name,
-
-        description: newProject.description,
-
-    };
-
-    return [project, ...projects];
+    return data.map((project) => ({
+        id: project.id,
+        name: project.name,
+        description: project.description ?? "",
+    }));
 
 }
 
-export function updateProject(
-    projects: Project[],
+export async function createProject(
+    newProject: ProjectFormData
+): Promise<void> {
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("Not authenticated.");
+    }
+
+    const { error } = await supabase
+        .from("projects")
+        .insert({
+            user_id: user.id,
+            name: newProject.name,
+            description: newProject.description,
+            status: "Not Started",
+        });
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+}
+
+export async function updateProject(
     projectId: number,
     updatedProject: ProjectFormData
-): Project[] {
+): Promise<void> {
 
-    return projects.map((project) =>
+    const { error } = await supabase
+        .from("projects")
+        .update({
+            name: updatedProject.name,
+            description: updatedProject.description,
+        })
+        .eq("id", projectId);
 
-        project.id === projectId
-            ? {
-                  ...project,
-                  ...updatedProject,
-              }
-            : project
-
-    );
+    if (error) {
+        throw new Error(error.message);
+    }
 
 }
 
-export function deleteProject(
-    projects: Project[],
+export async function deleteProject(
     projectId: number
-): Project[] {
+): Promise<void> {
 
-    return projects.filter(
-        (project) => project.id !== projectId
-    );
+    const { error } = await supabase
+        .from("projects")
+        .delete()
+        .eq("id", projectId);
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+}
+
+
+export async function deleteAllProjects(): Promise<void> {
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("Not authenticated.");
+    }
+
+    const { error } = await supabase
+        .from("projects")
+        .delete()
+        .eq("user_id", user.id);
+
+    if (error) {
+        throw new Error(error.message);
+    }
 
 }

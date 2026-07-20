@@ -290,24 +290,12 @@ export default function TasksPage() {
                     {filteredTasks.map((task) => (
 
                         <TaskCard
-
                             key={task.id}
-
                             task={task}
-
-                            onToggleComplete={
-                                handleToggleComplete
-                            }
-
-                            onEdit={
-                                handleEditTask
-                            }
-
-                            onDelete={
-                                (task) =>
-                                    setDeletingTask(task)
-                            }
-
+                            projects={projects}
+                            onToggleComplete={handleToggleComplete}
+                            onEdit={handleEditTask}
+                            onDelete={(task) => setDeletingTask(task)}
                         />
 
                     ))}

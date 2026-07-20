@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { projects as initialProjects } from "../data/projects";
-
 import {
-    load,
-    save,
-} from "../services/storage";
-
-import {
+    getProjects,
     createProject as createProjectService,
     updateProject as updateProjectService,
     deleteProject as deleteProjectService,
@@ -20,126 +14,74 @@ import type {
 
 import { useActivity } from "./useActivity";
 
-
-const STORAGE_KEY = "taskflow-projects";
-
-
 export function useProjects() {
 
-    const [projects, setProjects] = useState<Project[]>(() =>
-        load(
-            STORAGE_KEY,
-            initialProjects
-        )
-    );
-
+    const [projects, setProjects] = useState<Project[]>([]);
 
     const {
         createActivity,
     } = useActivity();
 
+    async function loadProjects() {
 
+        const data = await getProjects();
+
+        setProjects(data);
+
+    }
 
     useEffect(() => {
 
-        save(
-            STORAGE_KEY,
-            projects
-        );
+        loadProjects();
 
-    }, [projects]);
+    }, []);
 
-
-
-    function createProject(
+    async function createProject(
         newProject: ProjectFormData
     ) {
 
-        const project = {
-            id: Date.now(),
-            ...newProject,
-            progress: 0,
-            tasks: 0,
-        };
-
-
-        setProjects((previous) =>
-            createProjectService(
-                previous,
-                newProject
-            )
+        await createProjectService(
+            newProject
         );
 
+        await loadProjects();
 
         createActivity({
-
-            id: Date.now(),
-
             type: "project",
-
             title: "Project Created",
-
             description:
-                `"${project.name}" was created.`,
-
+                `"${newProject.name}" was created.`,
             time: "Just now",
 
         });
 
     }
 
-
-
-    function updateProject(
+    async function updateProject(
         id: number,
         updatedProject: ProjectFormData
     ) {
 
-
-        const existingProject =
-            projects.find(
-                (project) =>
-                    project.id === id
-            );
-
-
-        setProjects((previous) =>
-            updateProjectService(
-                previous,
-                id,
-                updatedProject
-            )
+        await updateProjectService(
+            id,
+            updatedProject
         );
 
+        await loadProjects();
 
-
-        if (existingProject) {
-
-            createActivity({
-
-                id: Date.now(),
-
-                type: "project",
-
-                title: "Project Updated",
-
-                description:
-                    `"${existingProject.name}" was updated.`,
-
-                time: "Just now",
-
-            });
-
-        }
+        createActivity({
+            type: "project",
+            title: "Project Updated",
+            description:
+                `"${updatedProject.name}" was updated.`,
+            time: "Just now",
+        });
 
     }
 
-
-
-    function deleteProject(
+    async function deleteProject(
         id: number
     ) {
-
 
         const project =
             projects.find(
@@ -147,38 +89,23 @@ export function useProjects() {
                     project.id === id
             );
 
+        await deleteProjectService(id);
 
-        setProjects((previous) =>
-            deleteProjectService(
-                previous,
-                id
-            )
-        );
-
-
+        await loadProjects();
 
         if (project) {
 
             createActivity({
-
-                id: Date.now(),
-
                 type: "project",
-
                 title: "Project Deleted",
-
                 description:
                     `"${project.name}" was removed.`,
-
                 time: "Just now",
-
             });
 
         }
 
     }
-
-
 
     return {
 
