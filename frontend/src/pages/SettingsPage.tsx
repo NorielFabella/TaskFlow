@@ -4,6 +4,7 @@ import AppearanceSection from "../features/settings/components/AppearanceSection
 import WorkspaceSection from "../features/settings/components/WorkspaceSection";
 import DataSection from "../features/settings/components/DataSection";
 import AboutSection from "../features/settings/components/AboutSection";
+import AccountSection from "../features/settings/components/AccountSection";
 
 export default function SettingsPage() {
 
@@ -17,6 +18,8 @@ export default function SettingsPage() {
             />
 
             <div className="grid gap-8 xl:grid-cols-2">
+
+                <AccountSection />
 
                 <AppearanceSection />
 

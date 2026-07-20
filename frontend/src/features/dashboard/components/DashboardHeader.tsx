@@ -1,6 +1,8 @@
 import Button from "../../../components/ui/Button";
+import { useAuth } from "../../auth/context/AuthContext";
 
 export default function DashboardHeader() {
+    const { user } = useAuth();
     const hour = new Date().getHours();
 
     let greeting = "Good Evening";
@@ -16,7 +18,8 @@ export default function DashboardHeader() {
 
             <div>
                 <h1 className="text-3xl font-bold text-white">
-                    {greeting}, Noriel 👋
+                    {greeting}
+                    {user?.name ? `, ${user.name}` : ""} 👋
                 </h1>
 
                 <p className="mt-2 text-zinc-400">

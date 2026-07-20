@@ -27,6 +27,8 @@ interface AuthContextValue {
 
     isAuthenticated: boolean;
 
+    isLoading: boolean;
+
     login: (
         data: LoginData
     ) => Promise<void>;
@@ -37,7 +39,12 @@ interface AuthContextValue {
 
     logout: () => Promise<void>;
 
+    updateUser: (
+        user: User
+    ) => void;
+
 }
+
 
 
 const AuthContext =
@@ -46,40 +53,59 @@ const AuthContext =
     );
 
 
+
 interface AuthProviderProps {
+
     children: ReactNode;
+
 }
+
 
 
 export function AuthProvider({
     children,
 }: AuthProviderProps) {
 
+
     const [user, setUser] =
         useState<User | null>(null);
 
 
-    const [loading, setLoading] =
+    const [isLoading, setIsLoading] =
         useState(true);
+
 
 
     useEffect(() => {
 
-        async function loadUser() {
 
-            const currentUser =
-                await getCurrentUser();
+        async function checkUser() {
 
-            setUser(currentUser);
+            try {
 
-            setLoading(false);
+                const currentUser =
+                    await getCurrentUser();
+
+
+                setUser(
+                    currentUser
+                );
+
+
+            } finally {
+
+                setIsLoading(false);
+
+            }
 
         }
 
 
-        loadUser();
+        checkUser();
+
 
     }, []);
+
 
 
 
@@ -88,11 +114,17 @@ export function AuthProvider({
     ) {
 
         const currentUser =
-            await loginService(data);
+            await loginService(
+                data
+            );
 
-        setUser(currentUser);
+
+        setUser(
+            currentUser
+        );
 
     }
+
 
 
 
@@ -100,9 +132,12 @@ export function AuthProvider({
         data: RegisterData
     ) {
 
-        await registerService(data);
+        await registerService(
+            data
+        );
 
     }
+
 
 
 
@@ -110,18 +145,38 @@ export function AuthProvider({
 
         await logoutService();
 
-        setUser(null);
+
+        setUser(
+            null
+        );
 
     }
 
 
 
+
+    function updateUser(
+        updatedUser: User
+    ) {
+
+        setUser(
+            updatedUser
+        );
+
+    }
+
+
+
+
     const value = useMemo(
         () => ({
+
             user,
 
             isAuthenticated:
                 user !== null,
+
+            isLoading,
 
             login,
 
@@ -129,24 +184,52 @@ export function AuthProvider({
 
             logout,
 
+            updateUser,
+
         }),
-        [user]
+        [
+            user,
+            isLoading,
+        ]
     );
 
 
 
-    if (loading) {
-        return null;
+
+    if (isLoading) {
+
+        return (
+
+            <div
+                className="
+                    flex
+                    min-h-screen
+                    items-center
+                    justify-center
+                    bg-zinc-950
+                    text-white
+                "
+            >
+                Loading...
+            </div>
+
+        );
+
     }
 
 
 
+
     return (
+
         <AuthContext.Provider
             value={value}
         >
+
             {children}
+
         </AuthContext.Provider>
+
     );
 
 }

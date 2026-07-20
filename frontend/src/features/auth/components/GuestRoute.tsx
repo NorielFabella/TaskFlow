@@ -11,7 +11,7 @@ import {
 } from "../context/AuthContext";
 
 
-interface ProtectedRouteProps {
+interface GuestRouteProps {
 
     children: ReactNode;
 
@@ -19,9 +19,9 @@ interface ProtectedRouteProps {
 
 
 
-export default function ProtectedRoute({
+export default function GuestRoute({
     children,
-}: ProtectedRouteProps) {
+}: GuestRouteProps) {
 
 
     const {
@@ -54,12 +54,12 @@ export default function ProtectedRoute({
 
 
 
-    if (!isAuthenticated) {
+    if (isAuthenticated) {
 
         return (
 
             <Navigate
-                to="/login"
+                to="/dashboard"
                 replace
             />
 

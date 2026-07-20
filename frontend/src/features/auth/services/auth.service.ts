@@ -177,3 +177,75 @@ export async function getCurrentUser(): Promise<User | null> {
     };
 
 }
+
+export async function updateProfileName(
+    name: string
+): Promise<User> {
+
+    const {
+        data: {
+            user: authUser,
+        },
+        error: authError,
+    } =
+        await supabase.auth.getUser();
+
+
+    if (authError || !authUser) {
+        throw new Error(
+            "User not authenticated."
+        );
+    }
+
+
+    const {
+        data: profile,
+        error,
+    } =
+        await supabase
+            .from("profiles")
+            .update({
+                name,
+            })
+            .eq(
+                "id",
+                authUser.id
+            )
+            .select()
+            .single();
+
+
+    if (error) {
+        throw new Error(
+            error.message
+        );
+    }
+
+
+    return {
+        id: profile.id,
+        name: profile.name,
+        email: profile.email,
+    };
+
+}
+
+export async function updatePassword(
+    password: string
+): Promise<void> {
+
+    const {
+        error,
+    } =
+        await supabase.auth.updateUser({
+            password,
+        });
+
+
+    if (error) {
+        throw new Error(
+            error.message
+        );
+    }
+
+}
