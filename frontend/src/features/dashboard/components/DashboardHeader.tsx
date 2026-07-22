@@ -1,8 +1,10 @@
 import Button from "../../../components/ui/Button";
 import { useAuth } from "../../auth/context/AuthContext";
+import { useProjectModal } from "../../projects/context/ProjectModalContext";
 
 export default function DashboardHeader() {
     const { user } = useAuth();
+    const { openCreateModal } = useProjectModal();
     const hour = new Date().getHours();
 
     let greeting = "Good Evening";
@@ -27,7 +29,7 @@ export default function DashboardHeader() {
                 </p>
             </div>
 
-            <Button>
+            <Button onClick={openCreateModal}>
                 + New Project
             </Button>
 

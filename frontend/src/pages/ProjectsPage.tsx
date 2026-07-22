@@ -1,39 +1,48 @@
 import { useState } from "react";
+import { toast } from "sonner";
 
 import ProjectsToolbar from "../features/projects/components/ProjectsToolbar";
 import ProjectCard from "../features/projects/components/ProjectCard";
 import EmptyProjects from "../features/projects/components/EmptyProjects";
-import ProjectModal from "../features/projects/components/ProjectModal";
+
 import ConfirmDialog from "../components/ui/ConfirmDialog";
-import { toast } from "sonner";
+import PageHeader from "../components/common/PageHeader";
 
 import { useProjects } from "../hooks/useProjects";
 import { useTasks } from "../hooks/useTasks";
+
 import { getProjectProgress } from "../services/projectProgress.service";
 
-import type { Project, ProjectFormData } from "../types/project";
-import PageHeader from "../components/common/PageHeader";
+import { useProjectModal } from "../features/projects/context/ProjectModalContext";
+
+import { useTasksContext } from "../features/tasks/context/TasksContext";
+
+import type { Project } from "../types/project";
 
 export default function ProjectsPage() {
+
     const [search, setSearch] = useState("");
+
     const [status, setStatus] = useState("All");
-
-    const [modalOpen, setModalOpen] = useState(false);
-
-    const [editingProject, setEditingProject] =
-        useState<Project | undefined>();
 
     const [deletingProject, setDeletingProject] =
         useState<Project | undefined>();
 
     const {
+        openCreateModal,
+        openEditModal,
+    } = useProjectModal();
+
+    const {
         projects,
-        createProject,
-        updateProject,
-        deleteProject
+        deleteProject,
     } = useProjects();
 
     const { tasks } = useTasks();
+
+    const {
+        refreshTasks,
+    } = useTasksContext();
 
     const filteredProjects = projects.filter((project) => {
 
@@ -56,44 +65,34 @@ export default function ProjectsPage() {
 
     });
 
-    function handleCreateProject(
-        newProject: ProjectFormData
-    ) {
-        createProject(newProject);
-        toast.success("Project created.");
-        setModalOpen(false);
-    }
+    async function handleDeleteProject() {
 
-    function handleUpdateProject(
-        updatedProject: ProjectFormData
-    ) {
-        if (!editingProject) return;
-
-        updateProject(
-            editingProject.id,
-            updatedProject
-        );
-
-        toast.success("Project updated.");
-
-        setEditingProject(undefined);
-        setModalOpen(false);
-    }
-
-    function handleDeleteProject() {
         if (!deletingProject) return;
 
-        deleteProject(deletingProject.id);
-        toast.success("Project deleted.");
+        await deleteProject(
+            deletingProject.id
+        );
+
+        await refreshTasks();
+
+        toast.success(
+            "Project deleted."
+        );
+
         setDeletingProject(undefined);
+
     }
 
-    function handleEditProject(project: Project) {
-        setEditingProject(project);
-        setModalOpen(true);
+    function handleEditProject(
+        project: Project
+    ) {
+
+        openEditModal(project);
+
     }
 
     return (
+
         <div className="space-y-8">
 
             <PageHeader
@@ -106,7 +105,7 @@ export default function ProjectsPage() {
                     status={status}
                     onSearchChange={setSearch}
                     onStatusChange={setStatus}
-                    onCreateProject={() => setModalOpen(true)}
+                    onCreateProject={openCreateModal}
                 />
 
             </PageHeader>
@@ -116,6 +115,7 @@ export default function ProjectsPage() {
                 <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
 
                     {filteredProjects.map((project) => (
+
                         <ProjectCard
                             key={project.id}
                             project={project}
@@ -123,6 +123,7 @@ export default function ProjectsPage() {
                             onEdit={handleEditProject}
                             onDelete={setDeletingProject}
                         />
+
                     ))}
 
                 </div>
@@ -132,30 +133,6 @@ export default function ProjectsPage() {
                 <EmptyProjects />
 
             )}
-
-            <ProjectModal
-                open={modalOpen}
-                project={editingProject}
-                title={
-                    editingProject
-                        ? "Edit Project"
-                        : "Create Project"
-                }
-                submitLabel={
-                    editingProject
-                        ? "Save Changes"
-                        : "Create Project"
-                }
-                onClose={() => {
-                    setModalOpen(false);
-                    setEditingProject(undefined);
-                }}
-                onSubmit={
-                    editingProject
-                        ? handleUpdateProject
-                        : handleCreateProject
-                }
-            />
 
             <ConfirmDialog
                 open={!!deletingProject}
@@ -168,9 +145,13 @@ export default function ProjectsPage() {
                 confirmText="Delete"
                 cancelText="Cancel"
                 onConfirm={handleDeleteProject}
-                onCancel={() => setDeletingProject(undefined)}
+                onCancel={() =>
+                    setDeletingProject(undefined)
+                }
             />
 
         </div>
+
     );
+
 }

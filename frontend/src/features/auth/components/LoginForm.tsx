@@ -20,28 +20,41 @@ export default function LoginForm() {
         password: "",
     });
 
+    const [isLoading, setIsLoading] =
+        useState(false);
+
     function updateField(
         field: keyof LoginData,
         value: string
     ) {
+
         setForm((previous) => ({
             ...previous,
             [field]: value,
         }));
+
     }
 
     async function handleSubmit(
         event: React.FormEvent<HTMLFormElement>
     ) {
+
         event.preventDefault();
 
         if (
             !form.email.trim() ||
             !form.password.trim()
         ) {
-            toast.error("Please fill in all fields.");
+
+            toast.error(
+                "Please fill in all fields."
+            );
+
             return;
+
         }
+
+        setIsLoading(true);
 
         try {
 
@@ -61,7 +74,12 @@ export default function LoginForm() {
                     : "Login failed."
             );
 
+        } finally {
+
+            setIsLoading(false);
+
         }
+
     }
 
     return (
@@ -130,8 +148,11 @@ export default function LoginForm() {
                 <Button
                     type="submit"
                     className="w-full"
+                    disabled={isLoading}
                 >
-                    Sign In
+                    {isLoading
+                        ? "Signing in..."
+                        : "Sign In"}
                 </Button>
 
             </form>
@@ -150,4 +171,5 @@ export default function LoginForm() {
             </p>
         </>
     );
+
 }

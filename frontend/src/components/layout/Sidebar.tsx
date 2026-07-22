@@ -17,7 +17,7 @@ import { useAuth } from "../../features/auth/context/AuthContext";
 const navigation = [
     {
         name: "Dashboard",
-        path: "/",
+        path: "/dashboard",
         icon: LayoutDashboard,
     },
     {
