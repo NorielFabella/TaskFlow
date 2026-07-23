@@ -1,11 +1,13 @@
 import Modal from "../../../components/ui/Modal";
 
+import type { Project } from "../../../types/project";
 import type { Task } from "../../../types/task";
 
 interface CalendarDayModalProps {
     open: boolean;
     date: Date | null;
     tasks: Task[];
+    projects: Project[];
     onClose: () => void;
 }
 
@@ -13,6 +15,7 @@ export default function CalendarDayModal({
     open,
     date,
     tasks,
+    projects,
     onClose,
 }: CalendarDayModalProps) {
 
@@ -64,7 +67,10 @@ export default function CalendarDayModal({
                             <div className="mt-3 flex items-center justify-between gap-3 text-xs text-zinc-500">
 
                                 <span className="min-w-0 truncate">
-                                    {task.project}
+                                    {projects.find(
+                                        (project) =>
+                                            project.id === task.projectId
+                                    )?.name ?? "Unknown Project"}
                                 </span>
 
                                 <span className="shrink-0">

@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { useTasks } from "../hooks/useTasks";
+import { useProjects } from "../hooks/useProjects";
 
 import {
     getTasksForDate,
@@ -17,6 +18,7 @@ import CalendarDayModal from "../features/calendar/components/CalendarDayModal";
 export default function CalendarPage() {
 
     const { tasks } = useTasks();
+    const { projects } = useProjects();
 
     const [currentDate, setCurrentDate] =
         useState(new Date());
@@ -102,6 +104,7 @@ export default function CalendarPage() {
                 open={modalOpen}
                 date={selectedDate}
                 tasks={selectedTasks}
+                projects={projects}
                 onClose={() => setModalOpen(false)}
             />
 

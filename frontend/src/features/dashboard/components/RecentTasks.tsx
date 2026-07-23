@@ -8,11 +8,13 @@ import Badge from "../../../components/ui/Badge";
 import Card from "../../../components/ui/Card";
 import SectionHeader from "../../../components/common/SectionHeader";
 
+import { useProjects } from "../../../hooks/useProjects";
 import { useTasks } from "../../../hooks/useTasks";
 
 export default function RecentTasks() {
 
     const { tasks } = useTasks();
+    const { projects } = useProjects();
 
     const recentTasks = tasks.slice(0, 5);
 
@@ -77,7 +79,10 @@ export default function RecentTasks() {
                                     </h3>
 
                                     <p className="truncate text-sm text-zinc-400">
-                                        {task.project}
+                                        {projects.find(
+                                            (project) =>
+                                                project.id === task.projectId
+                                        )?.name ?? "Unknown Project"}
                                     </p>
 
                                 </div>
