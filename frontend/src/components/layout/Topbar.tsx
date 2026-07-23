@@ -1,5 +1,6 @@
 import {
     Bell,
+    Menu,
     Moon,
     Search,
 } from "lucide-react";
@@ -13,7 +14,15 @@ const pageTitles: Record<string, string> = {
     "/settings": "Settings",
 };
 
-export default function Topbar() {
+interface TopbarProps {
+    isMenuOpen: boolean;
+    onMenuToggle: () => void;
+}
+
+export default function Topbar({
+    isMenuOpen,
+    onMenuToggle,
+}: TopbarProps) {
     const location = useLocation();
 
     const pageTitle =
@@ -24,9 +33,28 @@ export default function Topbar() {
 
             {/* Left */}
 
-            <h1 className="min-w-0 flex-1 truncate text-xl font-bold tracking-tight text-white sm:text-2xl">
-                {pageTitle}
-            </h1>
+            <div className="flex min-w-0 flex-1 items-center gap-3">
+
+                <button
+                    type="button"
+                    onClick={onMenuToggle}
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 text-zinc-400 transition-all duration-200 hover:border-white hover:text-white lg:hidden"
+                    aria-label={
+                        isMenuOpen
+                            ? "Close navigation"
+                            : "Open navigation"
+                    }
+                    aria-controls="mobile-navigation"
+                    aria-expanded={isMenuOpen}
+                >
+                    <Menu size={20} />
+                </button>
+
+                <h1 className="min-w-0 truncate text-xl font-bold tracking-tight text-white sm:text-2xl">
+                    {pageTitle}
+                </h1>
+
+            </div>
 
             {/* Right */}
 

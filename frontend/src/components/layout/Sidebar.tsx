@@ -42,7 +42,13 @@ const navigation = [
     },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+    onNavigate?: () => void;
+}
+
+export default function Sidebar({
+    onNavigate,
+}: SidebarProps) {
 
     const navigate = useNavigate();
 
@@ -52,6 +58,8 @@ export default function Sidebar() {
     } = useAuth();
 
     async function handleLogout() {
+
+        onNavigate?.();
 
         await logout();
 
@@ -107,6 +115,7 @@ export default function Sidebar() {
                                 key={item.path}
                                 to={item.path}
                                 end={item.path === "/"}
+                                onClick={onNavigate}
                                 className={({ isActive }) =>
                                     clsx(
                                         "group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200",
