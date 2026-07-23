@@ -65,9 +65,9 @@ export default function WorkspaceSection() {
 
                 <div className="space-y-4">
 
-                    <div className="flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-950 p-4">
+                    <div className="flex items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-950 p-4">
 
-                        <div>
+                        <div className="min-w-0">
 
                             <h3 className="font-medium text-white">
                                 Projects
@@ -79,15 +79,15 @@ export default function WorkspaceSection() {
 
                         </div>
 
-                        <span className="text-2xl font-bold text-white">
+                        <span className="shrink-0 text-2xl font-bold text-white">
                             {projects.length}
                         </span>
 
                     </div>
 
-                    <div className="flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-950 p-4">
+                    <div className="flex items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-950 p-4">
 
-                        <div>
+                        <div className="min-w-0">
 
                             <h3 className="font-medium text-white">
                                 Tasks
@@ -99,7 +99,7 @@ export default function WorkspaceSection() {
 
                         </div>
 
-                        <span className="text-2xl font-bold text-white">
+                        <span className="shrink-0 text-2xl font-bold text-white">
                             {tasks.length}
                         </span>
 

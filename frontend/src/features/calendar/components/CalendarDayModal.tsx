@@ -61,13 +61,13 @@ export default function CalendarDayModal({
                                 {task.description}
                             </p>
 
-                            <div className="mt-3 flex items-center justify-between text-xs text-zinc-500">
+                            <div className="mt-3 flex items-center justify-between gap-3 text-xs text-zinc-500">
 
-                                <span>
+                                <span className="min-w-0 truncate">
                                     {task.project}
                                 </span>
 
-                                <span>
+                                <span className="shrink-0">
                                     {task.priority}
                                 </span>
 

@@ -13,7 +13,10 @@ export default function RegisterForm() {
 
     const navigate = useNavigate();
 
-    const { register } = useAuth();
+    const {
+        register,
+        loginWithGoogle,
+    } = useAuth();
 
     const [form, setForm] = useState<RegisterData>({
         name: "",
@@ -22,19 +25,25 @@ export default function RegisterForm() {
         confirmPassword: "",
     });
 
+    const [isLoading, setIsLoading] =
+        useState(false);
+
     function updateField(
         field: keyof RegisterData,
         value: string
     ) {
+
         setForm((previous) => ({
             ...previous,
             [field]: value,
         }));
+
     }
 
     async function handleSubmit(
         event: React.FormEvent<HTMLFormElement>
     ) {
+
         event.preventDefault();
 
         if (
@@ -43,14 +52,29 @@ export default function RegisterForm() {
             !form.password.trim() ||
             !form.confirmPassword.trim()
         ) {
-            toast.error("Please fill in all fields.");
+
+            toast.error(
+                "Please fill in all fields."
+            );
+
             return;
+
         }
 
-        if (form.password !== form.confirmPassword) {
-            toast.error("Passwords do not match.");
+        if (
+            form.password !==
+            form.confirmPassword
+        ) {
+
+            toast.error(
+                "Passwords do not match."
+            );
+
             return;
+
         }
+
+        setIsLoading(true);
 
         try {
 
@@ -70,11 +94,35 @@ export default function RegisterForm() {
                     : "Registration failed."
             );
 
+        } finally {
+
+            setIsLoading(false);
+
         }
+
+    }
+
+    async function handleGoogleRegister() {
+
+        try {
+
+            await loginWithGoogle();
+
+        } catch (error) {
+
+            toast.error(
+                error instanceof Error
+                    ? error.message
+                    : "Google sign in failed."
+            );
+
+        }
+
     }
 
     return (
         <>
+
             <div className="mb-8 text-center">
 
                 <h1 className="text-3xl font-bold text-white">
@@ -179,8 +227,38 @@ export default function RegisterForm() {
                 <Button
                     type="submit"
                     className="w-full"
+                    disabled={isLoading}
                 >
-                    Create Account
+                    {isLoading
+                        ? "Creating Account..."
+                        : "Create Account"}
+                </Button>
+
+                <div className="relative">
+
+                    <div className="absolute inset-0 flex items-center">
+
+                        <div className="w-full border-t border-zinc-800" />
+
+                    </div>
+
+                    <div className="relative flex justify-center text-xs uppercase">
+
+                        <span className="bg-zinc-950 px-2 text-zinc-500">
+                            Or
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <Button
+                    type="button"
+                    variant="secondary"
+                    className="w-full"
+                    onClick={handleGoogleRegister}
+                >
+                    Continue with Google
                 </Button>
 
             </form>
@@ -197,6 +275,8 @@ export default function RegisterForm() {
                 </Link>
 
             </p>
+
         </>
     );
+
 }

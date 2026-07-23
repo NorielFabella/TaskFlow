@@ -165,15 +165,47 @@ export async function getCurrentUser(): Promise<User | null> {
             .single();
 
 
-    if (!profile) {
-        return null;
+    let currentProfile = profile;
+
+    if (!currentProfile) {
+
+        const generatedName =
+            session.user.user_metadata.full_name ??
+            session.user.user_metadata.name ??
+            session.user.email?.split("@")[0] ??
+            "User";
+
+        const { data: newProfile, error } =
+            await supabase
+                .from("profiles")
+                .insert({
+                    id: session.user.id,
+                    name: generatedName,
+                    email: session.user.email!,
+                })
+                .select()
+                .single();
+
+        if (error) {
+
+            throw new Error(
+                error.message
+            );
+
+        }
+
+        currentProfile = newProfile;
+
     }
 
-
     return {
-        id: profile.id,
-        name: profile.name,
-        email: profile.email,
+
+        id: currentProfile.id,
+
+        name: currentProfile.name,
+
+        email: currentProfile.email,
+
     };
 
 }
@@ -239,6 +271,28 @@ export async function updatePassword(
     } =
         await supabase.auth.updateUser({
             password,
+        });
+
+
+    if (error) {
+        throw new Error(
+            error.message
+        );
+    }
+
+}
+
+export async function loginWithGoogle(): Promise<void> {
+
+    const {
+        error,
+    } =
+        await supabase.auth.signInWithOAuth({
+            provider: "google",
+            options: {
+                redirectTo:
+                    window.location.origin,
+            },
         });
 
 

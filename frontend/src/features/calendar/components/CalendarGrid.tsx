@@ -44,7 +44,7 @@ export default function CalendarGrid({
 
                     <div
                         key={day}
-                        className="border-b border-zinc-800 bg-zinc-950 py-4 text-center text-sm font-semibold text-zinc-400"
+                        className="border-b border-zinc-800 bg-zinc-950 py-2 text-center text-xs font-semibold text-zinc-400 sm:py-4 sm:text-sm"
                     >
                         {day}
                     </div>
@@ -71,7 +71,7 @@ export default function CalendarGrid({
                             type="button"
                             onClick={() => onDayClick(day.date)}
                             className={clsx(
-                                "flex h-32 flex-col border border-zinc-800 p-3 text-left transition-colors hover:bg-zinc-800/40",
+                                "flex h-20 flex-col border border-zinc-800 p-1.5 text-left transition-colors hover:bg-zinc-800/40 sm:h-32 sm:p-3",
 
                                 !day.isCurrentMonth &&
                                     "bg-zinc-950 text-zinc-600"
@@ -82,7 +82,7 @@ export default function CalendarGrid({
 
                             <div
                                 className={clsx(
-                                    "flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold",
+                                    "flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold sm:h-8 sm:w-8 sm:text-sm",
 
                                     isToday(day.date) &&
                                         "bg-white text-black",
@@ -97,7 +97,7 @@ export default function CalendarGrid({
 
                             {/* Tasks */}
 
-                            <div className="mt-2 flex-1 space-y-1 overflow-hidden">
+                            <div className="mt-1 flex-1 space-y-1 overflow-hidden sm:mt-2">
 
                                 {dayTasks
                                     .slice(0, 2)
@@ -105,16 +105,22 @@ export default function CalendarGrid({
 
                                         <div
                                             key={task.id}
-                                            className="truncate rounded-md bg-zinc-800 px-2 py-1 text-xs text-white"
+                                            className="hidden truncate rounded-md bg-zinc-800 px-2 py-1 text-xs text-white sm:block"
                                         >
                                             {task.title}
                                         </div>
 
                                     ))}
 
+                                {dayTasks.length > 0 && (
+
+                                    <div className="mt-1 h-1.5 w-1.5 rounded-full bg-white sm:hidden" />
+
+                                )}
+
                                 {dayTasks.length > 2 && (
 
-                                    <div className="text-xs text-zinc-500">
+                                    <div className="hidden text-xs text-zinc-500 sm:block">
 
                                         +{dayTasks.length - 2} more
 

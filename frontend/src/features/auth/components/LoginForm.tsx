@@ -13,7 +13,10 @@ export default function LoginForm() {
 
     const navigate = useNavigate();
 
-    const { login } = useAuth();
+    const {
+        login,
+        loginWithGoogle,
+    } = useAuth();
 
     const [form, setForm] = useState<LoginData>({
         email: "",
@@ -77,6 +80,24 @@ export default function LoginForm() {
         } finally {
 
             setIsLoading(false);
+
+        }
+
+    }
+
+    async function handleGoogleLogin() {
+
+        try {
+
+            await loginWithGoogle();
+
+        } catch (error) {
+
+            toast.error(
+                error instanceof Error
+                    ? error.message
+                    : "Google login failed."
+            );
 
         }
 
@@ -156,6 +177,35 @@ export default function LoginForm() {
                 </Button>
 
             </form>
+
+            <div className="relative my-6">
+
+                <div className="absolute inset-0 flex items-center">
+
+                    <div className="w-full border-t border-zinc-800" />
+
+                </div>
+
+                <div className="relative flex justify-center">
+
+                    <span className="bg-zinc-950 px-4 text-sm text-zinc-500">
+                        OR
+                    </span>
+
+                </div>
+
+            </div>
+
+            <Button
+                type="button"
+                variant="secondary"
+                className="w-full"
+                onClick={handleGoogleLogin}
+            >
+
+                Continue with Google
+
+            </Button>
 
             <p className="mt-8 text-center text-sm text-zinc-400">
 

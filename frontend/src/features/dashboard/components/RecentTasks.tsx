@@ -46,7 +46,7 @@ export default function RecentTasks() {
                             "
                         >
 
-                            <div className="flex items-center gap-4">
+                            <div className="flex min-w-0 flex-1 items-center gap-4">
 
                                 {task.completed ? (
 
@@ -64,19 +64,19 @@ export default function RecentTasks() {
 
                                 )}
 
-                                <div>
+                                <div className="min-w-0">
 
                                     <h3
                                         className={
                                             task.completed
-                                                ? "font-medium text-zinc-500 line-through"
-                                                : "font-medium text-white"
+                                                ? "truncate font-medium text-zinc-500 line-through"
+                                                : "truncate font-medium text-white"
                                         }
                                     >
                                         {task.title}
                                     </h3>
 
-                                    <p className="text-sm text-zinc-400">
+                                    <p className="truncate text-sm text-zinc-400">
                                         {task.project}
                                     </p>
 
@@ -85,7 +85,7 @@ export default function RecentTasks() {
                             </div>
 
 
-                            <div className="flex items-center gap-3">
+                            <div className="flex shrink-0 items-center gap-3">
 
                                 <Badge
                                     variant={

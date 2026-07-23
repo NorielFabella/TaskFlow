@@ -7,6 +7,8 @@ import {
     type ReactNode,
 } from "react";
 
+import { useAuth } from "../../auth/context/AuthContext";
+
 import {
     getProjects,
     createProject as createProjectService,
@@ -56,6 +58,8 @@ export function ProjectsProvider({
     const [projects, setProjects] =
         useState<Project[]>([]);
 
+    const { user } = useAuth(); 
+
     const {
         createActivity,
     } = useActivity();
@@ -71,9 +75,18 @@ export function ProjectsProvider({
 
     useEffect(() => {
 
+        if (!user) {
+
+            setProjects([]);
+
+            return;
+
+        }
+
+
         refreshProjects();
 
-    }, []);
+    }, [user]);
 
     async function createProject(
         project: ProjectFormData

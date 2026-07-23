@@ -7,6 +7,8 @@ import {
     type ReactNode,
 } from "react";
 
+import { useAuth } from "../../auth/context/AuthContext";
+
 import {
     getTasks,
     createTask as createTaskService,
@@ -57,9 +59,11 @@ export function TasksProvider({
 }: {
     children: ReactNode;
 }) {
-
+    
     const [tasks, setTasks] =
         useState<Task[]>([]);
+    
+    const { user } = useAuth();
 
     const {
         createActivity,
@@ -76,9 +80,18 @@ export function TasksProvider({
 
     useEffect(() => {
 
+        if (!user) {
+
+            setTasks([]);
+
+            return;
+
+        }
+
+
         refreshTasks();
 
-    }, []);
+    }, [user]);
 
     async function createTask(
         task: TaskFormData

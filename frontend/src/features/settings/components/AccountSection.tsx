@@ -30,7 +30,7 @@ export default function AccountSection() {
                         Display Name
                     </p>
 
-                    <p className="mt-1 text-lg font-semibold text-white">
+                    <p className="mt-1 break-all text-lg font-semibold text-white">
                         {user?.name}
                     </p>
 
@@ -42,7 +42,7 @@ export default function AccountSection() {
                         Email
                     </p>
 
-                    <p className="mt-1 text-lg font-semibold text-white">
+                    <p className="mt-1 break-words text-lg font-semibold text-white">
                         {user?.email}
                     </p>
 

@@ -22,17 +22,18 @@ export default function ProjectsToolbar({
     return (
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
-            <div className="flex flex-1 gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row">
 
                 <Input
                     placeholder="Search projects..."
                     value={search}
                     onChange={(e) => onSearchChange(e.target.value)}
-                    className="max-w-md"
+                    className="sm:max-w-md sm:flex-1"
                     
                 />
 
                 <FilterSelect
+                    className="w-full sm:w-auto"
                     value={status}
                     onChange={(e) =>
                         onStatusChange(e.target.value)
@@ -59,6 +60,7 @@ export default function ProjectsToolbar({
 
             <Button
                 onClick={onCreateProject}
+                className="w-full sm:w-auto"
             >
                 + New Project
             </Button>

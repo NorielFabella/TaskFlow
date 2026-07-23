@@ -155,13 +155,13 @@ export default function TaskCard({
                     {task.priority}
                 </Badge>
 
-                <div className="flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900 px-3 py-1 text-xs text-zinc-400">
+                <div className="flex max-w-full items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900 px-3 py-1 text-xs text-zinc-400">
 
                     <FolderKanban
                         size={14}
                     />
 
-                    <span>
+                    <span className="truncate">
                         {project?.name ?? "Unknown Project"}
                     </span>
 

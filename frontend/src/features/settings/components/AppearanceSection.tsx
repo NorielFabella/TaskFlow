@@ -12,9 +12,9 @@ export default function AppearanceSection() {
                 subtitle="Customize how TaskFlow looks."
             />
 
-            <div className="flex items-center justify-between rounded-xl border border-zinc-800 bg-zinc-950 p-4">
+            <div className="flex items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-950 p-4">
 
-                <div>
+                <div className="min-w-0">
 
                     <h3 className="font-medium text-white">
                         Dark Theme
@@ -26,7 +26,7 @@ export default function AppearanceSection() {
 
                 </div>
 
-                <Badge variant="info">
+                <Badge variant="info" className="shrink-0">
                     Coming Soon
                 </Badge>
 

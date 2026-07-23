@@ -20,17 +20,17 @@ export default function Topbar() {
         pageTitles[location.pathname] ?? "TaskFlow";
 
     return (
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-zinc-800 bg-zinc-950/95 px-8 backdrop-blur">
+        <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-3 border-b border-zinc-800 bg-zinc-950/95 px-4 sm:px-6 lg:px-8 backdrop-blur">
 
             {/* Left */}
 
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="min-w-0 flex-1 truncate text-xl font-bold tracking-tight text-white sm:text-2xl">
                 {pageTitle}
             </h1>
 
             {/* Right */}
 
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
 
                 {/* Search */}
 
@@ -52,7 +52,7 @@ export default function Topbar() {
                 {/* Theme */}
 
                 <button
-                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 text-zinc-400 transition-all duration-200 hover:border-white hover:text-white"
+                    className="hidden h-10 w-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 text-zinc-400 transition-all duration-200 hover:border-white hover:text-white sm:flex"
                     aria-label="Toggle Theme"
                 >
                     <Moon size={18} />

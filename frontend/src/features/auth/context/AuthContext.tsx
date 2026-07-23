@@ -7,18 +7,22 @@ import {
     type ReactNode,
 } from "react";
 
+
 import type {
     LoginData,
     RegisterData,
     User,
 } from "../../../types/auth";
 
+
 import {
     login as loginService,
     register as registerService,
     logout as logoutService,
     getCurrentUser,
+    loginWithGoogle as loginWithGoogleService,
 } from "../services/auth.service";
+
 
 
 interface AuthContextValue {
@@ -38,6 +42,8 @@ interface AuthContextValue {
     ) => Promise<void>;
 
     logout: () => Promise<void>;
+
+    loginWithGoogle: () => Promise<void>;
 
     updateUser: (
         user: User
@@ -141,6 +147,15 @@ export function AuthProvider({
 
 
 
+    async function loginWithGoogle() {
+
+        await loginWithGoogleService();
+
+    }
+
+
+
+
     async function logout() {
 
         await logoutService();
@@ -183,6 +198,8 @@ export function AuthProvider({
             register,
 
             logout,
+
+            loginWithGoogle,
 
             updateUser,
 

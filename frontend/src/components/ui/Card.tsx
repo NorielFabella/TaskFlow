@@ -11,7 +11,7 @@ export default function Card({
     return (
         <div
             className={clsx(
-                "rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-sm",
+                "w-full min-w-0 max-w-full overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 p-4 sm:p-6 shadow-sm",
                 className
             )}
             {...props}
