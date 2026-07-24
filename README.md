@@ -1,174 +1,266 @@
 # TaskFlow
 
-A modern Kanban project management web application inspired by Trello and Jira.
+<p align="center">
 
-TaskFlow is designed to help individuals and teams organize projects, manage tasks, and collaborate through an intuitive drag-and-drop interface. The application focuses on delivering a clean user experience, responsive design, and real-time task management while following modern frontend development practices.
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white)
+![MIT License](https://img.shields.io/badge/License-MIT-green.svg)
 
-> 🚧 This project is currently under active development.
+</p>
+
+A modern **full-stack project management web application** built with **React, TypeScript, Vite, and Supabase**.
+
+TaskFlow helps individuals organize projects, manage tasks, monitor productivity, and track deadlines through a clean, responsive, and intuitive interface. It features secure authentication, project and task management, calendar scheduling, activity tracking, and Google Sign-In.
 
 ---
 
-## ✨ Features
+# 🌐 Live Demo
 
-### Project & Workspace Management
-- Create and manage multiple projects
-- Organize tasks into Kanban boards
-- Custom project descriptions
-- Team workspaces (planned)
+**Application**
 
-### Task Management
+https://YOUR-VERCEL-URL.vercel.app
+
+---
+
+# 📸 Screenshots
+
+## Dashboard
+
+![Dashboard](./screenshots/dashboard.png)
+
+---
+
+## Projects
+
+![Projects](./screenshots/projects.png)
+
+---
+
+## Tasks
+
+![Tasks](./screenshots/tasks.png)
+
+---
+
+## Calendar
+
+![Calendar](./screenshots/calendar.png)
+
+---
+
+## Settings
+
+![Settings](./screenshots/settings.png)
+
+---
+
+## Mobile Responsive
+
+![Mobile](./screenshots/mobile.png)
+
+> Replace these placeholder image paths with your own screenshots or GitHub image URLs.
+
+---
+
+# ✨ Features
+
+## 🔐 Authentication
+
+- Email & Password Authentication
+- Google Sign-In (OAuth)
+- Protected Routes
+- Persistent Login Sessions
+
+---
+
+## 📊 Dashboard
+
+- Real-time project statistics
+- Task completion overview
+- Recent projects
+- Recent tasks
+- Upcoming deadlines
+- Overdue tasks
+- Activity feed
+
+---
+
+## 📁 Project Management
+
+- Create, edit, and delete projects
+- Project descriptions
+- Automatic progress tracking
+- Project status overview
+
+---
+
+## ✅ Task Management
+
 - Create, edit, and delete tasks
-- Drag & drop between columns
-- Due dates
+- Associate tasks with projects
 - Task priorities
-- Labels & tags
-- Rich task descriptions
-- Assignees (planned)
-
-### User Experience
-- Responsive design
-- Dark / Light mode
-- Search and filtering
-- Smooth animations
-- Keyboard-friendly interactions
-
-### Authentication
-- Secure user authentication
-- Protected routes
-- User profiles
+- Due dates
+- Mark tasks as completed
 
 ---
 
-## 🛠 Tech Stack
+## 📅 Calendar
 
-### Frontend
-
-- React
-- TypeScript
-- Vite
-- Tailwind CSS
-
-### Backend
-
-- Supabase
-
-### Database
-
-- PostgreSQL (Supabase)
-
-### Development Tools
-
-- Git
-- GitHub
-- Visual Studio Code
-- Figma
+- Monthly calendar view
+- Daily task overview
+- Deadline visualization
 
 ---
 
-## 📂 Project Structure
+## ⚙️ Settings
 
+- Update profile information
+- Change password
+- Workspace information
+- Data management
+
+---
+
+## 📱 Responsive Design
+
+- Mobile-first layout
+- Responsive navigation drawer
+- Adaptive dashboard
+- Optimized cards and modals
+
+---
+
+# 🛠 Tech Stack
+
+| Category | Technologies |
+|----------|--------------|
+| **Frontend** | React, TypeScript, Vite, Tailwind CSS |
+| **Routing** | React Router |
+| **Backend** | Supabase |
+| **Database** | PostgreSQL (Supabase) |
+| **Authentication** | Supabase Auth, Google OAuth |
+| **Notifications** | Sonner |
+| **Icons** | Lucide React |
+| **Deployment** | Vercel |
+| **Version Control** | Git & GitHub |
+
+---
+
+# 📂 Project Structure
+
+```text
+TaskFlow
+│
+├── frontend
+│   ├── public
+│   ├── src
+│   │   ├── assets
+│   │   ├── components
+│   │   ├── features
+│   │   ├── hooks
+│   │   ├── pages
+│   │   ├── services
+│   │   ├── types
+│   │   └── ...
+│   │
+│   ├── package.json
+│   └── vite.config.ts
+│
+└── README.md
 ```
-TaskFlow/
-│
-├── docs/
-│   ├── API.md
-│   ├── DATABASE.md
-│   ├── FEATURES.md
-│   ├── PROJECT_PLAN.md
-│   ├── ROADMAP.md
-│   └── UI_UX.md
-│
-├── frontend/
-│
-├── README.md
-├── LICENSE
-└── .gitignore
+
+---
+
+# 🚀 Getting Started
+
+## Clone the repository
+
+```bash
+git clone https://github.com/NorielFabella/TaskFlow.git
+```
+
+## Navigate to the project
+
+```bash
+cd TaskFlow/frontend
+```
+
+## Install dependencies
+
+```bash
+npm install
+```
+
+## Configure environment variables
+
+Create a `.env` file.
+
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+## Run the development server
+
+```bash
+npm run dev
+```
+
+## Build for production
+
+```bash
+npm run build
 ```
 
 ---
 
-## 🚀 Roadmap
+# 🎯 Learning Objectives
 
-### Phase 1
-- [x] Project planning
-- [x] Documentation
-- [ ] React setup
-- [ ] Tailwind CSS
-- [ ] Application layout
+TaskFlow was developed to strengthen practical experience with:
 
-### Phase 2
-- [ ] Authentication
-- [ ] Dashboard
-- [ ] Kanban board
-- [ ] Drag & drop
-- [ ] Task CRUD
-
-### Phase 3
-- [ ] Search
-- [ ] Labels
-- [ ] Due dates
-- [ ] Responsive improvements
-
-### Phase 4
-- [ ] Team collaboration
-- [ ] Activity history
-- [ ] Notifications
-
-### Phase 5
-- [ ] Deployment
-- [ ] Performance optimization
-- [ ] Final polish
-
----
-
-## 📸 Screenshots
-
-Coming soon.
-
----
-
-## 🎯 Goals
-
-This project is being developed to demonstrate modern frontend engineering practices, including:
-
+- React + TypeScript
 - Component-based architecture
-- Clean and maintainable code
-- Responsive UI development
-- State management
-- API integration
+- Context API
+- Custom Hooks
+- CRUD operations
 - Authentication
-- Database integration
-- Professional Git workflow
+- Relational database design
+- Responsive UI development
+- Full-stack deployment
+- Production-ready development workflows
 
 ---
 
-## 📄 Documentation
+# 🔮 Future Improvements
 
-Detailed project documentation is available inside the `docs/` directory.
-
-- PROJECT_PLAN.md
-- FEATURES.md
-- ROADMAP.md
-- DATABASE.md
-- API.md
-- UI_UX.md
+- Drag-and-drop Kanban board
+- Advanced search & filtering
+- Labels & tags
+- Team collaboration
+- Notifications
+- File attachments
+- Email reminders
+- Recurring tasks
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Author
 
 **Noriel Omar R. Fabella**
 
 Frontend Developer
 
-GitHub: https://github.com/NorielFabella
-
-Portfolio: *(Coming Soon)*
-
-LinkedIn: https://linkedin.com/in/noriel-omar-fabella
+- 🌐 Portfolio: https://noriel-portfolio-three.vercel.app
+- 💻 GitHub: https://github.com/NorielFabella
+- 💼 LinkedIn: https://linkedin.com/in/noriel-omar-fabella
 
 ---
 
-## 📜 License
+# 📄 License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the MIT License.
