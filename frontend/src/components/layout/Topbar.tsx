@@ -5,6 +5,7 @@ import {
     Search,
 } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { useAuth } from "../../features/auth/context/AuthContext";
 
 const pageTitles: Record<string, string> = {
     "/": "Dashboard",
@@ -24,7 +25,14 @@ export default function Topbar({
     onMenuToggle,
 }: TopbarProps) {
     const location = useLocation();
+    const { user } = useAuth();
 
+    const displayName = user?.name ?? "User";
+        const parts = displayName.trim().split(/\s+/);
+        const initials =
+            parts.length === 1
+                ? parts[0][0].toUpperCase()
+                : `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
     const pageTitle =
         pageTitles[location.pathname] ?? "TaskFlow";
 
@@ -103,17 +111,17 @@ export default function Topbar({
                 <button className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 transition-all duration-200 hover:border-white">
 
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-sm font-semibold text-black">
-                        NF
+                        {initials}
                     </div>
 
                     <div className="hidden text-left xl:block">
 
                         <p className="text-sm font-medium text-white">
-                            Noriel
+                            {displayName}
                         </p>
 
                         <p className="text-xs text-zinc-500">
-                            Frontend Developer
+                            Signed in
                         </p>
 
                     </div>

@@ -179,13 +179,13 @@ export function getTasksForDate(
     date: Date
 ) {
 
-    return tasks.filter((task) =>
-
-        isSameDate(
-            parseLocalDate(task.dueDate),
-            date
-        )
-
+    return tasks.filter(
+        (task) =>
+            !task.completed &&
+            isSameDate(
+                parseLocalDate(task.dueDate),
+                date
+            )
     );
 
 }
